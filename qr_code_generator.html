@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Atikur's Physio Portal - QR Code Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="color"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="color"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .color-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .qr-display {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 2px dashed #667eea;
+        }
+
+        #qrcode {
+            display: inline-block;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            grid-column: 1 / -1;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .download-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .copy-btn {
+            background: #2196F3;
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background: #0b7dda;
+            transform: translateY(-2px);
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .preset-urls {
+            margin-bottom: 20px;
+        }
+
+        .preset-urls label {
+            margin-bottom: 10px;
+        }
+
+        .preset-button {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .preset-button:hover {
+            background: #764ba2;
+        }
+
+        .preview-poster {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .preview-poster h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .poster-content {
+            border: 3px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .poster-content h2 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .poster-content p {
+            color: #666;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .buttons,
+            .form-group,
+            label {
+                display: none;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🏥 QR Code Generator</h1>
+        <p>Dr. Atikur's Physiotherapy Portal</p>
+    </div>
+
+    <div class="info-box">
+        💡 <strong>Tip:</strong> Enter your portal URL below to generate a QR code. 
+        You can customize colors and download the QR code image to share or print!
+    </div>
+
+    <div class="form-group preset-urls">
+        <label>📋 Quick Templates:</label>
+        <button class="preset-button" onclick="setPresetUrl('github')">📌 GitHub Pages</button>
+        <button class="preset-button" onclick="setPresetUrl('netlify')">🌐 Netlify</button>
+        <button class="preset-button" onclick="setPresetUrl('vercel')">⚡ Vercel</button>
+    </div>
+
+    <div class="form-group">
+        <label for="portalUrl">📱 Portal URL:</label>
+        <input 
+            type="text" 
+            id="portalUrl" 
+            placeholder="https://yourusername.github.io/atikur-physio-portal/atikur_physio_customized_portal.html"
+            value="https://yourusername.github.io/atikur-physio-portal/atikur_physio_customized_portal.html"
+        >
+    </div>
+
+    <div class="form-group">
+        <label>🎨 Customize Colors:</label>
+        <div class="color-inputs">
+            <div>
+                <label for="darkColor" style="font-size: 12px;">Dark Color (QR):</label>
+                <input type="color" id="darkColor" value="#000000">
+            </div>
+            <div>
+                <label for="lightColor" style="font-size: 12px;">Light Color (Background):</label>
+                <input type="color" id="lightColor" value="#ffffff">
+            </div>
+        </div>
+    </div>
+
+    <div class="qr-display">
+        <p style="color: #999; margin-bottom: 15px; font-size: 12px;">✨ Your QR Code:</p>
+        <div id="qrcode"></div>
+    </div>
+
+    <div id="successMessage" class="success-message">
+        ✅ QR Code generated successfully!
+    </div>
+
+    <div class="buttons">
+        <button class="generate-btn" onclick="generateQRCode()">🔄 Generate QR Code</button>
+        <button class="download-btn" onclick="downloadQRCode()">📥 Download Image</button>
+        <button class="copy-btn" onclick="copyURLToClipboard()">📋 Copy URL</button>
+    </div>
+
+    <!-- Preview Poster -->
+    <div class="preview-poster">
+        <h3>📌 Example Poster Design</h3>
+        <div class="poster-content">
+            <h2>🏥 Dr. Atikur's Physio Portal</h2>
+            <p style="font-weight: bold;">50+ Disease Conditions | 250+ Quiz Questions</p>
+            <p style="margin: 15px 0;">📲 SCAN TO ACCESS:</p>
+            <div id="posterQR" style="display: inline-block; margin: 10px 0;"></div>
+            <p style="margin-top: 15px; color: #667eea; font-weight: bold;">Password: physio2026</p>
+            <p style="font-size: 11px;">📞 Contact: 01576956724 | 📧 atikurrahmanpollob890@gmail.com</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Generate QR Code on page load
+    window.onload = function() {
+        generateQRCode();
+        generatePosterQR();
+    };
+
+    function generateQRCode() {
+        const url = document.getElementById('portalUrl').value;
+        const darkColor = document.getElementById('darkColor').value;
+        const lightColor = document.getElementById('lightColor').value;
+
+        // Validate URL
+        if (!url.trim()) {
+            alert('❌ Please enter a valid portal URL');
+            return;
+        }
+
+        // Clear previous QR code
+        document.getElementById('qrcode').innerHTML = '';
+
+        // Generate new QR code
+        const qrcode = new QRCode(document.getElementById('qrcode'), {
+            text: url,
+            width: 300,
+            height: 300,
+            colorDark: darkColor,
+            colorLight: lightColor,
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        // Show success message
+        const successMsg = document.getElementById('successMessage');
+        successMsg.style.display = 'block';
+        setTimeout(() => {
+            successMsg.style.display = 'none';
+        }, 3000);
+    }
+
+    function generatePosterQR() {
+        const url = document.getElementById('portalUrl').value;
+        
+        document.getElementById('posterQR').innerHTML = '';
+        
+        const posterQR = new QRCode(document.getElementById('posterQR'), {
+            text: url,
+            width: 150,
+            height: 150,
+            colorDark: '#667eea',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    }
+
+    function downloadQRCode() {
+        const canvas = document.querySelector('#qrcode canvas');
+        
+        if (!canvas) {
+            alert('❌ Please generate QR code first');
+            return;
+        }
+
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'Dr_Atikur_PhysioPortal_QRCode.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function copyURLToClipboard() {
+        const url = document.getElementById('portalUrl').value;
+        
+        navigator.clipboard.writeText(url).then(() => {
+            alert('✅ URL copied to clipboard!');
+        }).catch(err => {
+            alert('❌ Could not copy URL');
+        });
+    }
+
+    function setPresetUrl(platform) {
+        const username = prompt('🔐 Enter your GitHub username (or leave blank for demo):', 'yourusername');
+        
+        let url = '';
+        
+        if (platform === 'github') {
+            url = `https://${username || 'yourusername'}.github.io/atikur-physio-portal/atikur_physio_customized_portal.html`;
+        } else if (platform === 'netlify') {
+            const siteName = prompt('🌐 Enter your Netlify site name:', 'yoursite');
+            url = `https://${siteName || 'yoursite'}.netlify.app`;
+        } else if (platform === 'vercel') {
+            const projectName = prompt('⚡ Enter your Vercel project name:', 'yourproject');
+            url = `https://${projectName || 'yourproject'}.vercel.app`;
+        }
+        
+        if (url) {
+            document.getElementById('portalUrl').value = url;
+            generateQRCode();
+            generatePosterQR();
+        }
+    }
+
+    // Update QR code when URL or colors change
+    document.getElementById('portalUrl').addEventListener('change', generateQRCode);
+    document.getElementById('darkColor').addEventListener('change', generateQRCode);
+    document.getElementById('lightColor').addEventListener('change', generateQRCode);
+</script>
+
+</body>
+</html>

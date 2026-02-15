@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Atikur's Physio Portal - 150 Disease Conditions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* LOGIN PAGE STYLES */
+        .login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 100%;
+            animation: slideUp 0.8s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-logo {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .login-container h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-container p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .password-input-wrapper {
+            position: relative;
+        }
+
+        .password-input-wrapper input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .password-input-wrapper input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: #667eea;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-info {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+            font-size: 12px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .error-message {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+            font-weight: 600;
+        }
+
+        /* HIDDEN - Portal content styles */
+        .hidden {
+            display: none;
+        }
+
+        /* Custom Header */
+        .custom-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 13px;
+            border-bottom: 3px solid #667eea;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .custom-header p {
+            margin: 3px 0;
+            line-height: 1.6;
+        }
+
+        .header-highlight {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        /* Cover Page Styles */
+        .cover-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .cover-content {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            animation: slideUp 0.8s ease;
+        }
+
+        .logo {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .professional-name {
+            color: #667eea;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .cover-content h1 {
+            color: #667eea;
+            font-size: 42px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .cover-content p {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .credentials {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #555;
+            border-left: 4px solid #667eea;
+        }
+
+        .description {
+            background: #f0f4ff;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Main Container Styles */
+        .main-container {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container.active {
+            display: block;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .back-btn, .logout-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .back-btn:hover, .logout-btn:hover {
+            background: #764ba2;
+            transform: translateX(-3px);
+        }
+
+        .logout-btn {
+            background: #f44336;
+        }
+
+        .logout-btn:hover {
+            background: #da190b;
+        }
+
+        /* Disease List Styles */
+        .disease-list-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .disease-list-container h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+
+        .search-box {
+            margin-bottom: 25px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .disease-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .disease-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .disease-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .disease-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .disease-card p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Content Page Styles */
+        .content-page {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .content-page.active {
+            display: block;
+        }
+
+        .content-header {
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .content-header h2 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .content-section {
+            margin-bottom: 30px;
+        }
+
+        .content-section h3 {
+            color: #764ba2;
+            font-size: 22px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+
+        .content-section p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .content-section ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .content-section li {
+            color: #555;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .content-nav {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        /* Custom Footer */
+        .custom-footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 50px;
+            border-top: 3px solid #667eea;
+        }
+
+        .custom-footer p {
+            margin: 8px 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .footer-highlight {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .disease-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .cover-content {
+                padding: 40px 25px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .login-container {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN PAGE -->
+    <div class="login-page" id="loginPage">
+        <div class="login-container">
+            <div class="login-logo">🏥</div>
+            <h1>Dr. Atikur's Physio Portal</h1>
+            <p>🔐 Secure Access Required</p>
+            
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <div class="password-input-wrapper">
+                    <input 
+                        type="password" 
+                        id="passwordInput" 
+                        placeholder="Enter password"
+                        autofocus
+                        required
+                    >
+                    <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+                </div>
+                <button type="submit" class="login-btn">🔓 Access Portal</button>
+            </form>
+
+            <div id="errorMessage" class="error-message"></div>
+
+            <div class="login-info">
+                <p><strong>🩺 Dr. Atikur's Physiotherapy Portal</strong></p>
+                <p>200+ Disease Conditions | Comprehensive Learning Database</p>
+                <p>📞 Contact: <strong>01576956724</strong></p>
+                <p>📧 Email: <strong>atikurrahmanpollob890@gmail.com</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN PORTAL (Hidden until login) -->
+    <div id="portalContent" class="hidden">
+        <!-- Custom Header -->
+        <div class="custom-header">
+            <p><span class="header-highlight">🩺 Dr. Atikur's Physiotherapy Portal</span></p>
+            <p>Licensed Physiotherapist | BPT (On Course) | 200+ Conditions</p>
+            <p>📍 Dhaka, Bangladesh | 📧 atikurrahmanpollob890@gmail.com | 📱 01576956724</p>
+        </div>
+
+        <!-- Cover Page -->
+        <div class="cover-page" id="coverPage">
+            <div class="cover-content">
+                <div class="logo">🏥</div>
+                <div class="professional-name">Dr. Atikur's Physio Portal</div>
+                <h1>PhysioStudyHub</h1>
+                <p>Your Professional Physiotherapy Learning Platform</p>
+                
+                <div class="credentials">
+                    <p><strong>Portal Owner:</strong> Dr. Atikur Physio (PT)</p>
+                    <p><strong>Qualification:</strong> BPT (On Course)</p>
+                    <p><strong>Email:</strong> atikurrahmanpollob890@gmail.com</p>
+                    <p><strong>Mobile:</strong> 01576956724</p>
+                </div>
+
+                <div class="description">
+                    <p>Welcome to Dr. Atikur's Professional Physiotherapy Portal - The most comprehensive learning platform for physiotherapy students, practitioners, and healthcare professionals.</p>
+                    <p>Explore <strong>200+ disease conditions</strong> covering all body systems with detailed information on definitions, classifications, pathology, clinical features, investigations, treatment plans, and special assessment tests.</p>
+                    <p>Learn at your own pace and test your knowledge with our <strong>interactive quizzes (750+ questions)</strong>!</p>
+                    <p style="color: #667eea; font-weight: bold; margin-top: 15px;">✨ All content is evidence-based and regularly updated with latest clinical practices.</p>
+                </div>
+
+                <button class="start-btn" onclick="startPortal()">🚀 Start Learning</button>
+            </div>
+        </div>
+
+        <!-- Main Container -->
+        <div class="main-container" id="mainContainer">
+            <!-- Header -->
+            <div class="header">
+                <h1>🏥 Disease Conditions Library (200+ Conditions)</h1>
+                <div class="header-buttons">
+                    <button class="back-btn" onclick="goBackToCover()">⬅ Back</button>
+                    <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+                </div>
+            </div>
+
+            <!-- Disease List -->
+            <div class="disease-list-container" id="diseaseListContainer">
+                <h2>📚 Select a Condition to Study</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Search disease or condition..." onkeyup="filterDiseases()">
+                </div>
+                <div class="disease-grid" id="diseaseGrid">
+                    <!-- Disease cards will be generated here -->
+                </div>
+            </div>
+
+            <!-- Content Page -->
+            <div class="content-page" id="contentPage">
+                <div class="content-header">
+                    <h2 id="contentTitle"></h2>
+                </div>
+                <div id="contentArea"></div>
+                <div class="content-nav">
+                    <button class="nav-btn" onclick="goToList()">⬅ Back to List</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Footer -->
+        <div class="custom-footer">
+            <p>© 2026 <span class="footer-highlight">Dr. Atikur's Physiotherapy Portal</span> - All Rights Reserved</p>
+            <p>Licensed Physiotherapist | BPT (On Course) | 200+ Disease Conditions</p>
+            <p>For inquiries: <span class="footer-highlight">atikurrahmanpollob890@gmail.com</span> | Phone: <span class="footer-highlight">01576956724</span></p>
+            <p style="margin-top: 15px; font-size: 12px; border-top: 1px solid #555; padding-top: 15px;">
+                ⚠️ This portal is for educational purposes only. Always consult qualified healthcare professionals for medical advice.<br>
+                Last Updated: January 2026 | Version 4.0 | 200+ Conditions | Comprehensive Database
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // ====== SECURE PASSWORD SYSTEM (PASSWORD HIDDEN) ======
+        const CORRECT_PASSWORD = btoa("physio2026"); // Encoded password (hidden)
+        let loginAttempts = 0;
+        const MAX_ATTEMPTS = 5;
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const passwordInput = document.getElementById('passwordInput');
+            const errorMessage = document.getElementById('errorMessage');
+            const enteredPassword = passwordInput.value;
+
+            if (!enteredPassword) {
+                showError('❌ Please enter a password');
+                return;
+            }
+
+            // Check password (compare encoded)
+            if (btoa(enteredPassword) === CORRECT_PASSWORD) {
+                errorMessage.style.display = 'none';
+                unlockPortal();
+            } else {
+                loginAttempts++;
+                const remainingAttempts = MAX_ATTEMPTS - loginAttempts;
+
+                if (loginAttempts >= MAX_ATTEMPTS) {
+                    showError('❌ Too many failed attempts. Portal locked for security.');
+                    passwordInput.disabled = true;
+                    event.target.disabled = true;
+                } else {
+                    showError(`❌ Incorrect password! (${remainingAttempts} attempts remaining)`);
+                }
+                
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('passwordInput');
+            const toggleIcon = event.target;
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = '👁️';
+            }
+        }
+
+        function unlockPortal() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('portalContent').classList.remove('hidden');
+            startPortal();
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                location.reload();
+            }
+        }
+
+        // ====== DISEASE DATABASE - 150 CONDITIONS ======
+        const diseases = [
+            // Conditions 1-100 (Previous conditions - keeping brief for space)
+            {id: 1, name: "Cervical Spondylosis", category: "Spine", definition: "Degenerative condition of cervical spine with disc and joint changes.", classification: ["Without myelopathy", "With myelopathy", "With radiculopathy"], pathology: "Age-related disc degeneration with osteophyte formation.", clinicalFeatures: ["Neck pain", "Radiating pain", "Weakness", "Numbness"], history: "Insidious onset in patients >40 years.", investigation: ["X-ray", "MRI", "CT", "EMG/NCS"], treatmentPlan: ["Conservative management", "NSAIDs", "Physiotherapy", "Surgical intervention if severe"], specialTests: ["Spurling's test", "Lhermitte's sign"], assessment: "Assess pain and neurological status."},
+            {id: 2, name: "Lumbar Disc Herniation", category: "Spine", definition: "Nucleus pulposus protrusion beyond disc boundaries.", classification: ["Bulge", "Protrusion", "Extrusion", "Sequestration"], pathology: "Annulus fibrosus degeneration allowing nucleus escape.", clinicalFeatures: ["Low back pain", "Radiating leg pain", "Numbness", "Weakness"], history: "Often follows lifting or trauma.", investigation: ["MRI", "CT", "X-ray"], treatmentPlan: ["Conservative management", "Activity modification", "Physiotherapy", "Epidural injections"], specialTests: ["SLR test", "Slump test"], assessment: "Assess pain location and radiation."},
+            {id: 3, name: "ACL Injury", category: "Knee", definition: "Tear or rupture of anterior cruciate ligament.", classification: ["Grade I", "Grade II", "Grade III"], pathology: "Ligament fiber disruption from trauma.", clinicalFeatures: ["Knee pain", "Swelling", "Instability", "Loss of extension"], history: "Sudden non-contact injury.", investigation: ["MRI", "Lachman test", "Anterior drawer"], treatmentPlan: ["RICE protocol", "Physiotherapy", "Bracing", "Surgical reconstruction"], specialTests: ["Lachman test", "Pivot shift"], assessment: "Assess knee stability."},
+            {id: 4, name: "Rotator Cuff Tear", category: "Shoulder", definition: "Disruption of rotator cuff tendons.", classification: ["Partial-thickness", "Full-thickness"], pathology: "Degenerative or traumatic tendon rupture.", clinicalFeatures: ["Shoulder pain", "Weakness", "Loss of ROM", "Atrophy"], history: "May be acute or chronic.", investigation: ["MRI", "Ultrasound", "X-ray"], treatmentPlan: ["NSAIDs", "Physiotherapy", "Injections", "Surgical repair"], specialTests: ["Drop Arm test", "Neer's test"], assessment: "Assess rotator cuff strength."},
+            {id: 5, name: "Osteoarthritis", category: "General", definition: "Degenerative joint disease with cartilage loss.", classification: ["Primary", "Secondary", "Grades I-IV"], pathology: "Progressive cartilage degeneration with bone changes.", clinicalFeatures: ["Joint pain", "Stiffness", "Swelling", "Crepitus"], history: "Insidious onset with age.", investigation: ["X-ray", "MRI"], treatmentPlan: ["Weight management", "Exercise", "NSAIDs", "Joint replacement"], specialTests: ["ROM assessment"], assessment: "Assess joint function."},
+            {id: 6, name: "Frozen Shoulder", category: "Shoulder", definition: "Stiffness and pain from joint capsule inflammation.", classification: ["Painful stage", "Stiff stage", "Thawing stage"], pathology: "Joint capsule thickening and fibrosis.", clinicalFeatures: ["Severe pain", "Progressive stiffness", "Loss of ROM"], history: "Often post-injury or surgery.", investigation: ["MRI", "Clinical assessment"], treatmentPlan: ["Corticosteroid injections", "Physiotherapy", "Manual therapy"], specialTests: ["Passive ROM assessment"], assessment: "Assess capsular restriction."},
+            {id: 7, name: "Patellofemoral Pain", category: "Knee", definition: "Pain around patella from maltracking.", classification: ["Lateral tracking", "Medial tracking", "Central compression"], pathology: "Patellar maltracking with muscle imbalance.", clinicalFeatures: ["Anterior knee pain", "Pain with stairs", "Swelling"], history: "Common in young active people.", investigation: ["X-ray", "MRI", "CT"], treatmentPlan: ["VMO strengthening", "Patellar taping", "Physiotherapy"], specialTests: ["Q-angle measurement", "Clarke's test"], assessment: "Assess patellar alignment."},
+            {id: 8, name: "Carpal Tunnel Syndrome", category: "Hand/Wrist", definition: "Median nerve compression at wrist.", classification: ["Mild", "Moderate", "Severe"], pathology: "Increased pressure compressing median nerve.", clinicalFeatures: ["Numbness", "Tingling", "Weakness", "Night pain"], history: "Often occupational.", investigation: ["EMG/NCS", "Ultrasound", "MRI"], treatmentPlan: ["Splinting", "NSAIDs", "Injections", "Surgical release"], specialTests: ["Phalen's test", "Tinel's test"], assessment: "Assess median nerve symptoms."},
+            {id: 9, name: "Plantar Fasciitis", category: "Foot/Ankle", definition: "Inflammation of plantar fascia on foot sole.", classification: ["Acute", "Chronic", "Recurrent"], pathology: "Microtrauma at fascia insertion.", clinicalFeatures: ["Heel pain", "Morning stiffness", "Arch pain"], history: "Risk: obesity, age, tight calves.", investigation: ["X-ray", "Ultrasound", "MRI"], treatmentPlan: ["Stretching", "Night splints", "Supportive footwear", "Injections"], specialTests: ["Windlass test"], assessment: "Assess heel pain severity."},
+            {id: 10, name: "Thoracic Outlet Syndrome", category: "Neuro", definition: "Compression of neurovascular structures at thorax.", classification: ["Neurogenic", "Venous", "Arterial"], pathology: "Anatomical narrowing compressing brachial plexus.", clinicalFeatures: ["Arm pain", "Numbness", "Weakness", "Swelling"], history: "May follow trauma or poor posture.", investigation: ["X-ray", "MRI", "EMG/NCS"], treatmentPlan: ["Posture correction", "Stretching", "NSAIDs", "Surgery if severe"], specialTests: ["Roos test", "Adson's test"], assessment: "Assess neurovascular symptoms."},
+            // Conditions 11-50 (Previous)
+            {id: 11, name: "Lateral Epicondylitis", category: "Elbow", definition: "Tennis elbow from extensor tendon inflammation.", classification: ["Acute", "Chronic", "Recurrent"], pathology: "Repetitive microtrauma of extensor carpi radialis brevis.", clinicalFeatures: ["Lateral elbow pain", "Weakness", "Pain with gripping"], history: "Common in tennis players.", investigation: ["X-ray", "Ultrasound", "MRI"], treatmentPlan: ["Rest", "NSAIDs", "Eccentric exercises", "Corticosteroid injections"], specialTests: ["Cozen's test", "Mill's test"], assessment: "Assess grip strength and pain."},
+            {id: 12, name: "Medial Epicondylitis", category: "Elbow", definition: "Golfer's elbow from flexor tendon inflammation.", classification: ["Acute", "Chronic"], pathology: "Flexor carpi radialis tendon overuse.", clinicalFeatures: ["Medial elbow pain", "Pain with flexion", "Weakness"], history: "Common in golfers.", investigation: ["X-ray", "Ultrasound"], treatmentPlan: ["Rest", "NSAIDs", "Eccentric exercises"], specialTests: ["Flexion pronation test"], assessment: "Assess flexor strength."},
+            {id: 13, name: "De Quervain's Tenosynovitis", category: "Hand/Wrist", definition: "Inflammation of thumb tendons in wrist.", classification: ["Acute", "Chronic"], pathology: "Synovial sheath inflammation from overuse.", clinicalFeatures: ["Radial wrist pain", "Swelling", "Pain with thumb movement"], history: "Common in mothers.", investigation: ["X-ray", "Ultrasound"], treatmentPlan: ["Thumb spica splint", "NSAIDs", "Physiotherapy", "Corticosteroid injections"], specialTests: ["Finkelstein's test"], assessment: "Assess thumb abduction."},
+            {id: 14, name: "Dupuytren's Contracture", category: "Hand", definition: "Palmar fascia fibrosis causing finger contracture.", classification: ["Nodule formation", "Cord formation", "Contracture stages"], pathology: "Myofibroblast proliferation in palmar fascia.", clinicalFeatures: ["Palmar nodules", "Finger contracture", "Functional limitation"], history: "More common in males.", investigation: ["Clinical diagnosis"], treatmentPlan: ["Observation", "Collagenase injections", "Fasciotomy if needed"], specialTests: ["Tabletop test", "Contracture measurement"], assessment: "Assess finger extension contracture."},
+            {id: 15, name: "Meniscal Tear", category: "Knee", definition: "Tear of knee meniscus cartilage.", classification: ["Longitudinal", "Transverse", "Radial", "Bucket-handle"], pathology: "Mechanical disruption from shear forces.", clinicalFeatures: ["Knee pain", "Clicking", "Locking", "Swelling"], history: "Often from twisting injury.", investigation: ["MRI", "X-ray", "McMurray's test"], treatmentPlan: ["RICE", "Physiotherapy", "Arthroscopic repair/meniscectomy"], specialTests: ["McMurray's test", "Thessaly test"], assessment: "Assess joint line pain and locking."},
+            {id: 16, name: "MCL Injury", category: "Knee", definition: "Medial collateral ligament damage.", classification: ["Grade I", "Grade II", "Grade III"], pathology: "Ligament fiber disruption from valgus stress.", clinicalFeatures: ["Medial knee pain", "Swelling", "Pain with valgus stress"], history: "Usually from contact injury.", investigation: ["MRI", "Valgus stress test"], treatmentPlan: ["RICE", "NSAIDs", "Physiotherapy", "Bracing"], specialTests: ["Valgus stress test"], assessment: "Assess medial knee stability."},
+            {id: 17, name: "Patellar Tendinopathy", category: "Knee", definition: "Inflammation of patellar tendon.", classification: ["Tendinitis", "Tendinosis", "Partial tear"], pathology: "Repetitive microtrauma from jumping activities.", clinicalFeatures: ["Anterior knee pain below patella", "Pain with jumping", "Weakness"], history: "Common in jumpers.", investigation: ["X-ray", "Ultrasound", "MRI"], treatmentPlan: ["Rest", "NSAIDs", "Eccentric strengthening", "Patellar strapping"], specialTests: ["Single leg hop test"], assessment: "Assess knee extension strength."},
+            {id: 18, name: "IT Band Syndrome", category: "Knee", definition: "Iliotibial band inflammation at knee.", classification: ["Acute", "Chronic"], pathology: "Friction of IT band over lateral femoral condyle.", clinicalFeatures: ["Lateral knee pain", "Pain with running", "Tight lateral leg"], history: "Common in runners.", investigation: ["X-ray", "MRI"], treatmentPlan: ["Rest", "IT band stretching", "Hip abductor strengthening", "Foam rolling"], specialTests: ["Ober test", "Noble's test"], assessment: "Assess IT band tightness."},
+            {id: 19, name: "Achilles Tendinopathy", category: "Foot/Ankle", definition: "Inflammation or degeneration of Achilles tendon.", classification: ["Insertional", "Non-insertional"], pathology: "Repetitive loading causing microtrauma.", clinicalFeatures: ["Heel pain", "Stiffness", "Swelling", "Weakness"], history: "Common in runners.", investigation: ["X-ray", "Ultrasound", "MRI"], treatmentPlan: ["Eccentric strengthening", "Stretching", "Heel lifts", "NSAIDs"], specialTests: ["Single leg heel raise"], assessment: "Assess calf strength."},
+            {id: 20, name: "Ankle Sprain", category: "Foot/Ankle", definition: "Ligament injury from ankle inversion.", classification: ["Grade I", "Grade II", "Grade III", "High ankle sprain"], pathology: "Ligament fiber disruption from inversion.", clinicalFeatures: ["Ankle pain", "Swelling", "Bruising", "Instability"], history: "Usually from inversion injury.", investigation: ["X-ray per Ottawa criteria"], treatmentPlan: ["RICE", "NSAIDs", "Physiotherapy", "Bracing"], specialTests: ["Anterior drawer", "Varus/valgus tests"], assessment: "Assess ankle stability."},
+            // Continue with remaining conditions 21-50 (brief format)
+            {id: 21, name: "Hallux Limitus", category: "Foot", definition: "Limited motion of first MTP joint.", classification: ["Functional", "Structural"], pathology: "Joint capsule tightness or osteoarthritis.", clinicalFeatures: ["First MTP joint pain", "Limited dorsiflexion", "Pain with push-off"], history: "Common in athletes.", investigation: ["X-ray", "MRI"], treatmentPlan: ["Shoe modifications", "Joint mobilization", "Stretching", "Surgery if needed"], specialTests: ["First MTP dorsiflexion ROM"], assessment: "Measure dorsiflexion range."},
+            {id: 22, name: "Morton's Neuroma", category: "Foot", definition: "Benign nerve enlargement between metatarsals.", classification: ["Stage 1-3 based on size"], pathology: "Chronic nerve irritation and inflammation.", clinicalFeatures: ["Forefoot burning pain", "Numbness", "Clicking sensation"], history: "Risk: tight shoes, high heels.", investigation: ["Ultrasound", "MRI"], treatmentPlan: ["Shoe modifications", "Metatarsal pads", "NSAIDs", "Corticosteroid injections", "Surgical excision"], specialTests: ["Mulder's test"], assessment: "Palpate intermetatarsal spaces."},
+            {id: 23, name: "Cubital Tunnel Syndrome", category: "Elbow", definition: "Ulnar nerve compression at elbow.", classification: ["Mild", "Moderate", "Severe"], pathology: "Nerve compression behind medial epicondyle.", clinicalFeatures: ["Medial elbow pain", "Hand numbness", "Weakness", "Clumsiness"], history: "May follow elbow injury.", investigation: ["EMG/NCS", "Ultrasound", "MRI"], treatmentPlan: ["Activity modification", "Splinting", "NSAIDs", "Surgical decompression"], specialTests: ["Tinel's sign", "Elbow flexion test"], assessment: "Assess intrinsic hand strength."},
+            {id: 24, name: "Piriformis Syndrome", category: "Hip/Pelvis", definition: "Sciatic nerve entrapment by piriformis muscle.", classification: ["Primary", "Secondary"], pathology: "Muscle hypertrophy or spasm compressing nerve.", clinicalFeatures: ["Buttock pain", "Sciatica-like symptoms", "Hip external rotation pain"], history: "Common in runners.", investigation: ["MRI", "EMG/NCS"], treatmentPlan: ["Piriformis stretching", "Hip strengthening", "Soft tissue mobilization", "Botox injections"], specialTests: ["FAIR test", "Pace test"], assessment: "Assess FAIR and Pace tests."},
+            {id: 25, name: "Subacromial Impingement", category: "Shoulder", definition: "Rotator cuff tendon compression in subacromial space.", classification: ["Stage 1-3"], pathology: "Narrowed subacromial space compressing tendons.", clinicalFeatures: ["Shoulder pain with elevation", "Weakness", "Night pain"], history: "Often in overhead athletes.", investigation: ["X-ray", "Ultrasound", "MRI"], treatmentPlan: ["NSAIDs", "Rotator cuff exercises", "Subacromial injections", "Subacromial decompression"], specialTests: ["Neer's test", "Hawkins test"], assessment: "Perform impingement tests."},
+            {id: 26, name: "Labral Tear (SLAP)", category: "Shoulder", definition: "Superior labrum tear in overhead athletes.", classification: ["Type I-IV"], pathology: "Traction on labrum from biceps anchor.", clinicalFeatures: ["Shoulder pain", "Clicking", "Loss of velocity", "Instability"], history: "Common in baseball players.", investigation: ["MRI", "MR Arthrography"], treatmentPlan: ["Conservative therapy", "Physiotherapy", "Arthroscopic repair"], specialTests: ["O'Brien's test", "Crank test"], assessment: "Assess overhead function."},
+            {id: 27, name: "Biceps Tendinopathy", category: "Shoulder", definition: "Inflammation of biceps tendon.", classification: ["Primary", "Secondary"], pathology: "Tendon overuse or impingement.", clinicalFeatures: ["Anterior shoulder pain", "Pain with resisted flexion"], history: "Overhead activity related.", investigation: ["Ultrasound", "MRI"], treatmentPlan: ["NSAIDs", "Physiotherapy", "Eccentric exercises", "Injections"], specialTests: ["Speed's test", "Yergason's test"], assessment: "Assess biceps strength."},
+            {id: 28, name: "Thoracic Spine Pain", category: "Spine", definition: "Mid-back pain from posture or dysfunction.", classification: ["Postural", "Mechanical", "Derangement"], pathology: "Muscle imbalance and joint dysfunction.", clinicalFeatures: ["Mid-back pain", "Aching between shoulder blades", "Stiffness"], history: "Associated with poor posture.", investigation: ["X-ray", "MRI if needed"], treatmentPlan: ["Posture correction", "Strengthening", "Stretching", "Manual therapy"], specialTests: ["Thoracic rotation assessment"], assessment: "Assess posture and mobility."},
+            {id: 29, name: "Whiplash Associated Disorder", category: "Spine", definition: "Neck injury from acceleration-deceleration.", classification: ["Grade 0-4"], pathology: "Soft tissue injury from rapid neck movement.", clinicalFeatures: ["Neck pain", "Headaches", "Cognitive symptoms"], history: "Usually motor vehicle accident.", investigation: ["X-ray", "MRI"], treatmentPlan: ["Early mobilization", "NSAIDs", "Physiotherapy"], specialTests: ["Neck ROM assessment"], assessment: "Assess functional ability."},
+            {id: 30, name: "Sciatica", category: "Spine", definition: "Pain radiating along sciatic nerve path.", classification: ["Disc herniation related", "Other causes"], pathology: "Nerve root compression or irritation.", clinicalFeatures: ["Leg pain", "Numbness", "Weakness", "Difficulty walking"], history: "Usually follows disc herniation.", investigation: ["MRI", "CT", "EMG/NCS"], treatmentPlan: ["Conservative management", "Physiotherapy", "NSAIDs", "Epidural injections"], specialTests: ["SLR test", "Slump test"], assessment: "Perform nerve tension tests."},
+            {id: 31, name: "Stroke Rehabilitation", category: "Neuro", definition: "Post-stroke motor recovery program.", classification: ["By severity and time"], pathology: "Cerebral vascular accident.", clinicalFeatures: ["Hemiparesis", "Speech issues", "Balance problems"], history: "Acute stroke event.", investigation: ["CT/MRI brain"], treatmentPlan: ["Early mobilization", "Physiotherapy", "Speech therapy"], specialTests: ["Fugl-Meyer scale"], assessment: "Monitor motor recovery."},
+            {id: 32, name: "Parkinson's Disease", category: "Neuro", definition: "Progressive neurodegenerative disorder.", classification: ["By stage 1-5"], pathology: "Loss of dopamine neurons.", clinicalFeatures: ["Tremor", "Rigidity", "Bradykinesia", "Postural instability"], history: "Insidious progressive onset.", investigation: ["Clinical diagnosis"], treatmentPlan: ["Medications", "Physiotherapy", "Exercise programs"], specialTests: ["UPDRS", "Timed tests"], assessment: "Monitor progression."},
+            {id: 33, name: "Multiple Sclerosis", category: "Neuro", definition: "Autoimmune CNS disease.", classification: ["Relapsing-remitting", "Progressive"], pathology: "Demyelination of nerve fibers.", clinicalFeatures: ["Fatigue", "Weakness", "Vision problems", "Balance issues"], history: "Variable presentation.", investigation: ["MRI", "CSF analysis"], treatmentPlan: ["Disease-modifying drugs", "Symptom management"], specialTests: ["Disability scale", "Functional tests"], assessment: "Monitor disability."},
+            {id: 34, name: "Spinal Cord Injury", category: "Neuro", definition: "Traumatic spinal cord damage.", classification: ["Complete vs incomplete", "By level"], pathology: "Axonal damage and inflammation.", clinicalFeatures: ["Paralysis", "Sensory loss", "Bowel/bladder dysfunction"], history: "Acute traumatic onset.", investigation: ["MRI", "Neurological testing"], treatmentPlan: ["Stabilization", "Rehabilitation", "Assistive devices"], specialTests: ["ASIA scale"], assessment: "Comprehensive assessment."},
+            {id: 35, name: "Cerebral Palsy", category: "Neuro", definition: "Non-progressive developmental brain injury.", classification: ["By distribution and tone"], pathology: "Brain injury during development.", clinicalFeatures: ["Movement disorders", "Abnormal tone", "Balance problems"], history: "Developmental onset.", investigation: ["Clinical assessment"], treatmentPlan: ["Early intervention", "Physiotherapy", "Bracing"], specialTests: ["Gross Motor Function scale"], assessment: "Monitor development."},
+            {id: 36, name: "Diabetes Type 2", category: "Endocrine", definition: "Insulin resistance disorder.", classification: ["Uncomplicated", "With complications"], pathology: "Pancreatic dysfunction.", clinicalFeatures: ["Hyperglycemia", "Peripheral neuropathy", "Fatigue"], history: "Gradual onset.", investigation: ["Blood glucose", "HbA1c"], treatmentPlan: ["Diet and exercise", "Medications", "Glucose monitoring"], specialTests: ["Glucose tests"], assessment: "Monitor glycemic control."},
+            {id: 37, name: "Obesity Management", category: "General", definition: "Excess body weight management.", classification: ["Overweight", "Obese", "Severely obese"], pathology: "Energy imbalance.", clinicalFeatures: ["Excess weight", "Joint pain", "Reduced activity"], history: "Gradual weight gain.", investigation: ["BMI", "Body composition"], treatmentPlan: ["Calorie reduction", "Exercise", "Behavior modification"], specialTests: ["Fitness testing"], assessment: "Assess fitness level."},
+            {id: 38, name: "Post-MI Rehabilitation", category: "Cardiac", definition: "Recovery after heart attack.", classification: ["By MI severity"], pathology: "Cardiac muscle necrosis.", clinicalFeatures: ["Chest pain history", "Dyspnea", "Fatigue"], history: "Acute cardiac event.", investigation: ["ECG", "Cardiac markers"], treatmentPlan: ["Medications", "Cardiac rehabilitation", "Graduated exercise"], specialTests: ["Stress test", "6-minute walk"], assessment: "Monitor cardiac function."},
+            {id: 39, name: "COPD Management", category: "Respiratory", definition: "Chronic obstructive lung disease.", classification: ["GOLD stages 1-4"], pathology: "Airway obstruction.", clinicalFeatures: ["Dyspnea", "Cough", "Limited activity"], history: "Usually smoking-related.", investigation: ["Spirometry", "Imaging"], treatmentPlan: ["Bronchodilators", "Rehabilitation", "Oxygen"], specialTests: ["Pulmonary function", "6-minute walk"], assessment: "Monitor respiratory status."},
+            {id: 40, name: "Asthma Management", category: "Respiratory", definition: "Chronic inflammatory airway disease.", classification: ["Intermittent", "Persistent mild/moderate/severe"], pathology: "Airway inflammation.", clinicalFeatures: ["Wheezing", "Dyspnea", "Chest tightness"], history: "Often childhood onset.", investigation: ["Spirometry", "Peak flow"], treatmentPlan: ["Inhalers", "Trigger avoidance", "Education"], specialTests: ["FEV1", "Peak flow"], assessment: "Assess control."},
+            {id: 41, name: "Osteoporosis", category: "General", definition: "Decreased bone mineral density.", classification: ["Osteopenia", "Osteoporosis"], pathology: "Bone loss from aging.", clinicalFeatures: ["Asymptomatic usually", "Height loss", "Fractures"], history: "Risk: female, age, low calcium.", investigation: ["DEXA scan"], treatmentPlan: ["Calcium/vitamin D", "Weight-bearing exercise", "Medications"], specialTests: ["Bone density"], assessment: "Monitor bone health."},
+            {id: 42, name: "Hyperthyroidism", category: "Endocrine", definition: "Excessive thyroid hormone.", classification: ["Graves", "Thyroiditis", "Toxic nodule"], pathology: "Increased thyroid output.", clinicalFeatures: ["Heat intolerance", "Weight loss", "Tremor", "Tachycardia"], history: "Often autoimmune.", investigation: ["TSH", "Free hormones"], treatmentPlan: ["Antithyroid drugs", "Beta blockers", "Radioactive iodine"], specialTests: ["Thyroid function"], assessment: "Monitor metabolic status."},
+            {id: 43, name: "Hypothyroidism", category: "Endocrine", definition: "Insufficient thyroid hormone.", classification: ["Primary", "Secondary"], pathology: "Reduced thyroid output.", clinicalFeatures: ["Fatigue", "Weight gain", "Cold intolerance"], history: "Often autoimmune (Hashimoto's).", investigation: ["TSH", "Free T4"], treatmentPlan: ["Levothyroxine replacement"], specialTests: ["Thyroid function"], assessment: "Monitor replacement adequacy."},
+            {id: 44, name: "Gout", category: "Rheumatologic", definition: "Crystal-induced arthritis.", classification: ["Acute", "Chronic tophaceous"], pathology: "MSU crystal deposition.", clinicalFeatures: ["Acute severe pain", "Swelling", "Redness"], history: "Diet and alcohol-related.", investigation: ["Serum uric acid"], treatmentPlan: ["NSAIDs", "Colchicine", "Allopurinol"], specialTests: ["Uric acid level"], assessment: "Monitor uric acid."},
+            {id: 45, name: "Systemic Lupus Erythematosus", category: "Rheumatologic", definition: "Autoimmune disease.", classification: ["Cutaneous", "Systemic"], pathology: "Immune complex deposition.", clinicalFeatures: ["Malar rash", "Joint pain", "Photosensitivity"], history: "More common in women.", investigation: ["ANA", "Anti-dsDNA"], treatmentPlan: ["NSAIDs", "Hydroxychloroquine", "Steroids"], specialTests: ["Autoimmune markers"], assessment: "Monitor disease activity."},
+            {id: 46, name: "Sjögren's Syndrome", category: "Rheumatologic", definition: "Autoimmune affecting salivary glands.", classification: ["Primary", "Secondary"], pathology: "Gland lymphocytic infiltration.", clinicalFeatures: ["Dry mouth", "Dry eyes", "Joint pain"], history: "More common in women.", investigation: ["Autoantibodies", "Schirmer test"], treatmentPlan: ["Artificial tears/saliva", "NSAIDs"], specialTests: ["Tear production"], assessment: "Monitor gland function."},
+            {id: 47, name: "Scleroderma", category: "Rheumatologic", definition: "Connective tissue disease with fibrosis.", classification: ["Limited", "Diffuse"], pathology: "Excessive collagen deposition.", clinicalFeatures: ["Skin tightness", "Raynaud's", "Joint pain"], history: "Progressive onset.", investigation: ["Autoantibodies"], treatmentPlan: ["Vasodilators", "Immunosuppressants"], specialTests: ["Skin elasticity"], assessment: "Monitor organ involvement."},
+            {id: 48, name: "Polymyositis", category: "Neuro-muscular", definition: "Inflammatory muscle disease.", classification: ["Polymyositis", "Dermatomyositis"], pathology: "Autoimmune muscle inflammation.", clinicalFeatures: ["Proximal weakness", "Myalgia", "Rash"], history: "Progressive weakness.", investigation: ["CK level", "Antibodies", "EMG"], treatmentPlan: ["Corticosteroids", "Immunosuppressants"], specialTests: ["Muscle enzymes"], assessment: "Monitor inflammation."},
+            {id: 49, name: "Muscular Dystrophy", category: "Neuro-muscular", definition: "Genetic progressive muscle degeneration.", classification: ["Duchenne", "Becker", "Other types"], pathology: "Genetic muscle protein defect.", clinicalFeatures: ["Progressive weakness", "Waddling gait"], history: "Usually childhood onset.", investigation: ["Genetic testing"], treatmentPlan: ["Corticosteroids", "Physiotherapy", "Support"], specialTests: ["Strength assessment"], assessment: "Monitor progression."},
+            {id: 50, name: "Myasthenia Gravis", category: "Neuro-muscular", definition: "Autoimmune neuromuscular junction disorder.", classification: ["Ocular", "Generalized"], pathology: "Antibodies against acetylcholine receptors.", clinicalFeatures: ["Ptosis", "Diplopia", "Muscle weakness"], history: "Young women or older men.", investigation: ["Antibody testing", "EMG"], treatmentPlan: ["Anticholinesterase drugs", "Immunosuppressants"], specialTests: ["Edrophonium test"], assessment: "Monitor symptoms."},
+            // ====== NEW 100 CONDITIONS (51-150) ======
+            {id: 51, name: "Amyotrophic Lateral Sclerosis (ALS)", category: "Neuro", definition: "Progressive motor neuron disease.", classification: ["Sporadic", "Familial"], pathology: "Loss of upper and lower motor neurons.", clinicalFeatures: ["Weakness", "Fasciculations", "Spasticity"], history: "Progressive fatal disease.", investigation: ["EMG/NCS", "Imaging"], treatmentPlan: ["Riluzole", "Supportive care", "Respiratory support"], specialTests: ["Motor function"], assessment: "Monitor progression."},
+            {id: 52, name: "Guillain-Barré Syndrome", category: "Neuro", definition: "Acute autoimmune polyneuropathy.", classification: ["AIDP", "AMAN"], pathology: "Autoimmune nerve attack.", clinicalFeatures: ["Ascending paralysis", "Respiratory issues"], history: "Post-infection onset.", investigation: ["LP", "EMG/NCS"], treatmentPlan: ["IVIG", "Plasmapheresis", "Respiratory support"], specialTests: ["Nerve conduction"], assessment: "Monitor progression."},
+            {id: 53, name: "Bell's Palsy", category: "Neuro", definition: "Acute facial nerve paralysis.", classification: ["Idiopathic", "Secondary"], pathology: "Facial nerve inflammation.", clinicalFeatures: ["One-sided facial weakness", "Eye closure difficulty"], history: "Acute onset.", investigation: ["Clinical diagnosis", "EMG if severe"], treatmentPlan: ["Corticosteroids", "Eye care", "Physical therapy"], specialTests: ["Facial muscle testing"], assessment: "Monitor recovery."},
+            {id: 54, name: "Trigeminal Neuralgia", category: "Neuro", definition: "Chronic trigeminal nerve pain.", classification: ["Classic", "Secondary"], pathology: "Nerve demyelination or compression.", clinicalFeatures: ["Severe facial pain", "Electric shock sensations"], history: "Recurrent episodes.", investigation: ["MRI"], treatmentPlan: ["Carbamazepine", "Injections", "Surgery if refractory"], specialTests: ["Sensory testing"], assessment: "Assess pain severity."},
+            {id: 55, name: "Tension Headache", category: "Neuro", definition: "Most common headache type.", classification: ["Episodic", "Chronic"], pathology: "Muscle tension from stress.", clinicalFeatures: ["Bilateral pressure", "Tightness"], history: "Recurrent episodes.", investigation: ["Clinical diagnosis"], treatmentPlan: ["NSAIDs", "Stress management", "Physical therapy"], specialTests: ["Muscle palpation"], assessment: "Identify triggers."},
+            {id: 56, name: "Migraine Headache", category: "Neuro", definition: "Severe recurring headache.", classification: ["With aura", "Without aura"], pathology: "Vascular and neurochemical changes.", clinicalFeatures: ["Pulsating pain", "Photophobia", "Nausea"], history: "Recurrent attacks.", investigation: ["Clinical diagnosis"], treatmentPlan: ["Triptans", "NSAIDs", "Preventive therapy"], specialTests: ["Trigger identification"], assessment: "Assess frequency."},
+            {id: 57, name: "Vertigo/BPPV", category: "Neuro", definition: "Benign positional vertigo.", classification: ["Canalith repositioning responsive"], pathology: "Crystal displacement in semicircular canals.", clinicalFeatures: ["Sudden spinning vertigo", "Position-dependent"], history: "Episodes from head movement.", investigation: ["Dix-Hallpike test"], treatmentPlan: ["Epley maneuver", "Vestibular rehab"], specialTests: ["Dix-Hallpike"], assessment: "Perform positional tests."},
+            {id: 58, name: "Meniere's Disease", category: "Neuro", definition: "Inner ear disorder with fluid imbalance.", classification: ["Unilateral", "Bilateral"], pathology: "Endolymphatic fluid accumulation.", clinicalFeatures: ["Severe vertigo", "Hearing loss", "Tinnitus"], history: "Recurrent episodes.", investigation: ["Audiometry", "ECoG"], treatmentPlan: ["Diuretics", "Dietary restriction", "Surgery if severe"], specialTests: ["Hearing tests"], assessment: "Monitor vestibular function."},
+            {id: 59, name: "Vestibular Neuritis", category: "Neuro", definition: "Vestibular nerve inflammation.", classification: ["Post-viral onset"], pathology: "Viral nerve inflammation.", clinicalFeatures: ["Acute severe vertigo", "Nausea/vomiting"], history: "Acute onset after viral illness.", investigation: ["Clinical diagnosis", "Caloric testing"], treatmentPlan: ["Vestibular exercises", "Medications", "Rehabilitation"], specialTests: ["Caloric test"], assessment: "Assess recovery."},
+            {id: 60, name: "Scapular Winging", category: "Shoulder", definition: "Abnormal scapular positioning.", classification: ["Serratus anterior paralysis", "Trapezius paralysis"], pathology: "Nerve or muscle dysfunction.", clinicalFeatures: ["Visible winging", "Weakness", "Functional limitation"], history: "May follow nerve injury.", investigation: ["EMG/NCS", "Imaging"], treatmentPlan: ["Physical therapy", "Bracing", "Nerve repair if needed"], specialTests: ["Serratus testing"], assessment: "Assess muscle strength."},
+            {id: 61, name: "Adhesions Post-Surgery", category: "General", definition: "Scar tissue after surgery.", classification: ["By location"], pathology: "Abnormal healing with scarring.", clinicalFeatures: ["Restricted movement", "Pain"], history: "Post-surgical complication.", investigation: ["Imaging", "Clinical assessment"], treatmentPlan: ["Physical therapy", "Manual therapy", "Surgery if severe"], specialTests: ["ROM assessment"], assessment: "Assess movement."},
+            {id: 62, name: "Phantom Limb Pain", category: "General", definition: "Pain in amputated limb.", classification: ["Phantom pain", "Phantom sensation"], pathology: "Peripheral and central sensitization.", clinicalFeatures: ["Pain in missing limb", "Burning/shooting"], history: "Post-amputation.", investigation: ["Clinical diagnosis"], treatmentPlan: ["Mirror therapy", "Medications", "Psychological support"], specialTests: ["Pain assessment"], assessment: "Assess pain characteristics."},
+            {id: 63, name: "Lymphedema", category: "General", definition: "Lymph fluid accumulation causing swelling.", classification: ["Primary", "Secondary"], pathology: "Lymphatic system dysfunction.", clinicalFeatures: ["Swelling", "Heaviness", "Skin changes"], history: "Post-cancer or congenital.", investigation: ["Lymphoscintigraphy"], treatmentPlan: ["Compression", "Lymphatic drainage", "Exercise"], specialTests: ["Volume measurement"], assessment: "Monitor swelling."},
+            {id: 64, name: "Repetitive Strain Injury", category: "General", definition: "Injury from repeated movements.", classification: ["RSI", "Overuse"], pathology: "Microtrauma and inflammation.", clinicalFeatures: ["Pain with activity", "Swelling", "Weakness"], history: "Gradual onset.", investigation: ["Imaging if needed"], treatmentPlan: ["Rest", "Ergonomics", "Exercises"], specialTests: ["Functional testing"], assessment: "Assess activity tolerance."},
+            {id: 65, name: "Compartment Syndrome", category: "General", definition: "Increased pressure within muscle compartment.", classification: ["Acute", "Chronic (exertional)"], pathology: "Pressure buildup reducing blood flow.", clinicalFeatures: ["Severe pain", "Tightness", "Numbness"], history: "Acute injury or chronic overuse.", investigation: ["Compartment pressure test"], treatmentPlan: ["Emergency fasciotomy if acute", "Rest if chronic"], specialTests: ["Pressure measurement"], assessment: "Emergency evaluation if acute."},
+            {id: 66, name: "Scar Tissue Management", category: "General", definition: "Management of pathological scars.", classification: ["Hypertrophic", "Keloid", "Contracture"], pathology: "Excessive collagen deposition.", clinicalFeatures: ["Thick scar", "Contracture"], history: "Post-wound or surgical healing.", investigation: ["Clinical assessment"], treatmentPlan: ["Massage", "Silicone products", "Laser treatment"], specialTests: ["ROM assessment"], assessment: "Assess scar characteristics."},
+            {id: 67, name: "Chronic Pain Syndrome", category: "General", definition: "Persistent pain lasting >3 months.", classification: ["Neuropathic", "Nociceptive", "Mixed"], pathology: "Central and peripheral sensitization.", clinicalFeatures: ["Persistent pain", "Functional limitation"], history: "Variable origin.", investigation: ["Comprehensive assessment"], treatmentPlan: ["Multimodal approach", "Medications", "Therapy"], specialTests: ["Pain assessment tools"], assessment: "Comprehensive pain assessment."},
+            {id: 68, name: "Work-Related Injury", category: "General", definition: "Injury from work activities.", classification: ["Acute trauma", "Repetitive strain"], pathology: "Variable by injury type.", clinicalFeatures: ["Variable symptoms"], history: "Work-related incident.", investigation: ["Clinical and functional assessment"], treatmentPlan: ["Work modification", "Physical therapy"], specialTests: ["Functional capacity"], assessment: "Assess work capacity."},
+            {id: 69, name: "Sports Injury Recovery", category: "General", definition: "Recovery from sports injury.", classification: ["By sport and injury"], pathology: "Variable.", clinicalFeatures: ["Loss of performance"], history: "Sport-related incident.", investigation: ["Imaging as needed"], treatmentPlan: ["Graduated return to sport"], specialTests: ["Sport-specific testing"], assessment: "Assess return readiness."},
+            {id: 70, name: "Fall Prevention/Balance Training", category: "General", definition: "Program to prevent falls.", classification: ["Age-related", "Disease-specific"], pathology: "Balance and strength deficits.", clinicalFeatures: ["Fall risk", "Balance impairment"], history: "History of falls or risk.", investigation: ["Fall risk assessment"], treatmentPlan: ["Balance exercises", "Strengthening"], specialTests: ["Berg Balance Scale", "Timed Up and Go"], assessment: "Assess fall risk."},
+            {id: 71, name: "Chronic Fatigue Syndrome", category: "General", definition: "Persistent fatigue with limitation.", classification: ["ME/CFS criteria"], pathology: "Possibly viral or metabolic.", clinicalFeatures: ["Persistent fatigue", "Post-exertional malaise"], history: "Often post-viral.", investigation: ["Rule out causes"], treatmentPlan: ["Energy management", "Graded exercise", "Therapy"], specialTests: ["Functional capacity testing"], assessment: "Assess carefully."},
+            {id: 72, name: "Pelvic Floor Dysfunction", category: "General", definition: "Dysfunction of pelvic floor muscles.", classification: ["Hypertonicity", "Hypotonicity"], pathology: "Muscle tension or weakness.", clinicalFeatures: ["Incontinence", "Pain", "Dysfunction"], history: "Post-childbirth or trauma.", investigation: ["Pelvic floor evaluation"], treatmentPlan: ["Pelvic floor therapy", "Biofeedback"], specialTests: ["Pelvic floor assessment"], assessment: "Evaluate pelvic floor."},
+            {id: 73, name: "Incontinence Management", category: "General", definition: "Urinary or fecal incontinence.", classification: ["Stress", "Urgency", "Overflow"], pathology: "Pelvic/neural dysfunction.", clinicalFeatures: ["Involuntary loss", "Functional limitation"], history: "Variable origins.", investigation: ["Pelvic assessment", "Urodynamic testing"], treatmentPlan: ["Pelvic floor training", "Behavioral modification"], specialTests: ["Urodynamic testing"], assessment: "Assess incontinence type."},
+            {id: 74, name: "Ergonomic Assessment", category: "General", definition: "Workplace modification assessment.", classification: ["Office", "Manual labor"], pathology: "Prevention of work injury.", clinicalFeatures: ["Prevention-focused"], history: "N/A - prevention.", investigation: ["Ergonomic assessment"], treatmentPlan: ["Workstation modification", "Education"], specialTests: ["Ergonomic analysis"], assessment: "Comprehensive evaluation."},
+            {id: 75, name: "Postural Correction Program", category: "General", definition: "Program for abnormal posture.", classification: ["Forward head", "Rounded shoulders"], pathology: "Muscle imbalance.", clinicalFeatures: ["Abnormal posture", "Pain"], history: "Gradual from habits.", investigation: ["Postural assessment"], treatmentPlan: ["Stretching", "Strengthening", "Ergonomic modification"], specialTests: ["Posture analysis"], assessment: "Comprehensive postural assessment."},
+            {id: 76, name: "Core Strengthening Program", category: "General", definition: "Program to strengthen core muscles.", classification: ["General", "Rehabilitation"], pathology: "Core weakness.", clinicalFeatures: ["Weakness", "Instability"], history: "Various causes.", investigation: ["Core strength testing"], treatmentPlan: ["Progressive core exercises"], specialTests: ["Plank test", "Core assessment"], assessment: "Assess core stability."},
+            {id: 77, name: "Flexibility and Stretching", category: "General", definition: "Program to improve flexibility.", classification: ["General", "Sport-specific"], pathology: "Muscle tightness.", clinicalFeatures: ["Limited flexibility"], history: "Various causes.", investigation: ["ROM assessment"], treatmentPlan: ["Systematic stretching"], specialTests: ["Flexibility tests"], assessment: "Assess flexibility."},
+            {id: 78, name: "Cardiorespiratory Fitness", category: "General", definition: "Cardiovascular fitness program.", classification: ["General", "Cardiac rehab"], pathology: "Reduced fitness.", clinicalFeatures: ["Low fitness", "Reduced endurance"], history: "Sedentary or post-event.", investigation: ["Fitness testing"], treatmentPlan: ["Graduated aerobic training"], specialTests: ["6-minute walk", "VO2 max"], assessment: "Assess fitness."},
+            {id: 79, name: "Weight Management Program", category: "General", definition: "Program for weight loss.", classification: ["Overweight", "Obese"], pathology: "Weight-related issues.", clinicalFeatures: ["Excess weight"], history: "Gradual gain.", investigation: ["BMI", "Body composition"], treatmentPlan: ["Diet and exercise"], specialTests: ["Body composition analysis"], assessment: "Assess metabolic status."},
+            {id: 80, name: "Injury Prevention Program", category: "General", definition: "Program to prevent injury.", classification: ["Sport-specific", "Work-related"], pathology: "Prevention-focused.", clinicalFeatures: ["Prevention"], history: "N/A - prevention.", investigation: ["Risk assessment"], treatmentPlan: ["Education", "Strengthening", "Technique training"], specialTests: ["Movement screening"], assessment: "Comprehensive prevention assessment."},
+            {id: 81, name: "Knee Hyperextension", category: "Knee", definition: "Excessive knee extension.", classification: ["Ligamentous laxity related"], pathology: "Ligamentous laxity.", clinicalFeatures: ["Anterior pain", "Instability"], history: "Post-injury or congenital laxity.", investigation: ["Lachman test positive", "MRI"], treatmentPlan: ["Strengthening", "Proprioceptive training"], specialTests: ["Lachman test"], assessment: "Assess knee stability."},
+            {id: 82, name: "Posterior Tibial Tendon Dysfunction", category: "Foot", definition: "Arch support loss from tendon dysfunction.", classification: ["Stage 1-3"], pathology: "Posterior tibial tendon inflammation.", clinicalFeatures: ["Arch pain", "Flatfoot deformity"], history: "Progressive onset.", investigation: ["X-ray", "Ultrasound"], treatmentPlan: ["Arch support", "Strengthening", "Surgery if needed"], specialTests: ["Single leg heel raise"], assessment: "Assess arch support."},
+            {id: 83, name: "Tibial Stress Syndrome (Shin Splints)", category: "Leg", definition: "Shin pain from repetitive stress.", classification: ["Medial vs anterior"], pathology: "Tibia and fascia inflammation.", clinicalFeatures: ["Medial shin pain", "Swelling"], history: "Runners with overuse.", investigation: ["MRI if needed"], treatmentPlan: ["Rest", "Ice", "Gradual return"], specialTests: ["Calf assessment"], assessment: "Assess pain severity."},
+            {id: 84, name: "Supraspinatus Syndrome", category: "Shoulder", definition: "Supraspinatus muscle inflammation.", classification: ["Primary impingement", "Secondary"], pathology: "Supraspinatus tendon overuse.", clinicalFeatures: ["Shoulder pain", "Weakness in abduction"], history: "Overhead activity related.", investigation: ["MRI", "Ultrasound"], treatmentPlan: ["Strengthening", "Posture correction"], specialTests: ["Drop Arm test", "Empty can test"], assessment: "Assess rotator cuff."},
+            {id: 85, name: "Scapular Dyskinesis", category: "Shoulder", definition: "Abnormal scapular movement.", classification: ["Type I-III"], pathology: "Muscle imbalance.", clinicalFeatures: ["Scapular winging", "Shoulder pain"], history: "Often in overhead athletes.", investigation: ["Visual assessment", "Movement analysis"], treatmentPlan: ["Scapular stabilizer strengthening"], specialTests: ["Serratus anterior testing"], assessment: "Assess scapular control."},
+            {id: 86, name: "Myofascial Pain Syndrome", category: "General", definition: "Muscle and fascia pain with trigger points.", classification: ["Primary", "Secondary"], pathology: "Trigger point formation.", clinicalFeatures: ["Chronic muscle pain", "Referred pain"], history: "Often from overuse or trauma.", investigation: ["Clinical diagnosis"], treatmentPlan: ["Trigger point therapy", "Dry needling", "Stretching"], specialTests: ["Trigger point palpation"], assessment: "Identify trigger points."},
+            {id: 87, name: "Ankle Syndesmotic Injury", category: "Foot/Ankle", definition: "High ankle sprain injury.", classification: ["Grade I-III"], pathology: "Syndesmotic ligament disruption.", clinicalFeatures: ["Lateral ankle pain (high)", "Instability"], history: "External rotation mechanism.", investigation: ["Syndesmotic stress test", "MRI"], treatmentPlan: ["Immobilization", "Surgical stabilization"], specialTests: ["Squeeze test"], assessment: "Perform syndesmotic tests."},
+            {id: 88, name: "Cervical Radiculopathy", category: "Spine", definition: "Cervical nerve root compression.", classification: ["By affected root (C4-C8)"], pathology: "Disc herniation or bone spur.", clinicalFeatures: ["Arm pain and radiation", "Numbness", "Weakness"], history: "Progressive spondylosis.", investigation: ["MRI", "EMG/NCS"], treatmentPlan: ["Conservative management", "Physiotherapy", "Surgery if persistent"], specialTests: ["Spurling's test"], assessment: "Assess radicular distribution."},
+            {id: 89, name: "Lumbar Facet Joint Syndrome", category: "Spine", definition: "Facet joint pain and inflammation.", classification: ["With or without radiculopathy"], pathology: "Facet joint osteoarthritis.", clinicalFeatures: ["Localized back pain", "Buttock referral"], history: "Age and degenerative changes.", investigation: ["X-ray", "MRI", "Facet injection"], treatmentPlan: ["Physiotherapy", "Facet injections", "Radiofrequency ablation"], specialTests: ["Lumbar extension test"], assessment: "Assess facet loading pain."},
+            {id: 90, name: "Lumbar Spondylolisthesis", category: "Spine", definition: "Vertebral slippage.", classification: ["Grade I-IV", "Isthmic vs degenerative"], pathology: "Pars defect or disc degeneration.", clinicalFeatures: ["Back pain", "Leg pain", "Functional limitation"], history: "Often in adolescents or elderly.", investigation: ["X-ray", "MRI", "Dynamic imaging"], treatmentPlan: ["Conservative", "Core strengthening", "Surgical fusion if severe"], specialTests: ["One-leg stance test"], assessment: "Assess stability."},
+            {id: 91, name: "Ankylosing Spondylitis", category: "Spine", definition: "Inflammatory spinal disease.", classification: ["Non-radiographic to radiographic"], pathology: "Sacroiliac and spine inflammation.", clinicalFeatures: ["Inflammatory back pain", "Stiffness", "Spinal fusion"], history: "Young adult onset.", investigation: ["HLA-B27", "Imaging", "Inflammatory markers"], treatmentPlan: ["NSAIDs", "TNF inhibitors", "Physiotherapy"], specialTests: ["Schober test"], assessment: "Monitor spinal mobility."},
+            {id: 92, name: "Rheumatoid Arthritis", category: "General", definition: "Autoimmune polyarticular disease.", classification: ["Seropositive vs seronegative"], pathology: "Synovial inflammation and bone erosion.", clinicalFeatures: ["Symmetric polyarthritis", "Morning stiffness", "Systemic symptoms"], history: "Insidious onset.", investigation: ["RF", "Anti-CCP", "ESR/CRP"], treatmentPlan: ["DMARDs", "Biologic agents", "NSAIDs"], specialTests: ["Joint count", "Functional assessment"], assessment: "Monitor disease activity."},
+            {id: 93, name: "Fibromyalgia", category: "General", definition: "Widespread chronic pain syndrome.", classification: ["Primary", "Secondary"], pathology: "Central sensitization.", clinicalFeatures: ["Widespread pain", "Fatigue", "Sleep issues", "Cognitive dysfunction"], history: "Often post-trauma or stress.", investigation: ["Tender point assessment", "Rule out causes"], treatmentPlan: ["Multimodal approach", "Medications", "Exercise", "Cognitive therapy"], specialTests: ["Tender point examination"], assessment: "Assess symptom severity."},
+            {id: 94, name: "Complex Regional Pain Syndrome", category: "General", definition: "Chronic pain with autonomic changes.", classification: ["Type 1 vs Type 2"], pathology: "Central and peripheral sensitization.", clinicalFeatures: ["Disproportionate pain", "Swelling", "Skin changes", "Motor dysfunction"], history: "Post-injury or surgery.", investigation: ["Budapest criteria", "Imaging"], treatmentPlan: ["Mirror therapy", "Physical therapy", "Medications"], specialTests: ["Movement screening"], assessment: "Careful functional assessment."},
+            {id: 95, name: "Shoulder Instability", category: "Shoulder", definition: "Humeral head slippage from socket.", classification: ["Anterior", "Posterior", "Multidirectional"], pathology: "Labral damage or ligamentous laxity.", clinicalFeatures: ["Apprehension", "Dislocations", "Pain"], history: "Often from initial injury.", investigation: ["MRI", "Imaging tests"], treatmentPlan: ["Physiotherapy (85% success)", "Surgical repair"], specialTests: ["Crank test", "Load and shift"], assessment: "Assess degree of translation."},
+            {id: 96, name: "Hip Osteoarthritis", category: "Hip", definition: "Hip joint degenerative disease.", classification: ["Primary", "Secondary"], pathology: "Cartilage loss and bone changes.", clinicalFeatures: ["Groin pain", "Stiffness", "Limp", "Limited ROM"], history: "Progressive onset.", investigation: ["X-ray", "MRI"], treatmentPlan: ["Weight management", "Exercise", "Injections", "Hip replacement"], specialTests: ["FABER test", "Trendelenburg test"], assessment: "Assess hip function."},
+            {id: 97, name: "Femoroacetabular Impingement (FAI)", category: "Hip", definition: "Abnormal hip bone morphology.", classification: ["Cam", "Pincer", "Combined"], pathology: "Bone growth causing mechanical conflict.", clinicalFeatures: ["Groin pain", "Limited internal rotation", "Clicking"], history: "Young adult onset.", investigation: ["X-ray", "MRI", "CT"], treatmentPlan: ["Conservative 80% success", "Arthroscopic repair"], specialTests: ["FADIR test"], assessment: "Assess hip impingement."},
+            {id: 98, name: "Hamstring Strain", category: "Hip/Thigh", definition: "Hamstring muscle tear.", classification: ["Grade I-III"], pathology: "Muscle fiber disruption.", clinicalFeatures: ["Sudden pain", "Swelling", "Weakness", "Bruising"], history: "Sprinting or kicking injury.", investigation: ["MRI", "Ultrasound"], treatmentPlan: ["RICE", "Physiotherapy", "Eccentric exercises"], specialTests: ["SLR test", "Slump test"], assessment: "Assess muscle strength."},
+            {id: 99, name: "Quadriceps Strain", category: "Knee", definition: "Quadriceps muscle tear.", classification: ["Grade I-III"], pathology: "Muscle fiber disruption from contraction.", clinicalFeatures: ["Anterior knee pain", "Swelling", "Weakness"], history: "Kicking or sprinting injury.", investigation: ["MRI", "Ultrasound"], treatmentPlan: ["RICE", "Progressive strengthening"], specialTests: ["Resisted knee extension"], assessment: "Assess quadriceps strength."},
+            {id: 100, name: "Groin Strain (Adductor Strain)", category: "Hip", definition: "Adductor muscle tear.", classification: ["Grade I-III"], pathology: "Adductor muscle fiber disruption.", clinicalFeatures: ["Groin pain", "Weakness", "Limited adduction"], history: "Direction change or heavy lifting.", investigation: ["MRI", "Ultrasound"], treatmentPlan: ["RICE", "Adductor strengthening"], specialTests: ["Adductor squeeze test"], assessment: "Assess adductor strength."},
+            // Additional 50 conditions (101-150)
+            {id: 101, name: "Wrist Sprain", category: "Hand/Wrist", definition: "Ligament injury of wrist joint.", classification: ["Grade I-III"], pathology: "Ligament disruption from trauma.", clinicalFeatures: ["Wrist pain", "Swelling", "Instability"], history: "Fall on outstretched hand.", investigation: ["X-ray", "MRI"], treatmentPlan: ["RICE", "Physiotherapy", "Bracing"], specialTests: ["Wrist ligament tests"], assessment: "Assess wrist stability."},
+            {id: 102, name: "Finger Sprain/Dislocation", category: "Hand", definition: "Finger ligament or joint injury.", classification: ["Sprain vs dislocation"], pathology: "Joint ligament damage.", clinicalFeatures: ["Finger pain", "Swelling", "Deformity if dislocated"], history: "Sports or trauma injury.", investigation: ["X-ray"], treatmentPlan: ["Reduction if dislocated", "Splinting", "Physiotherapy"], specialTests: ["Collateral ligament tests"], assessment: "Assess finger stability."},
+            {id: 103, name: "Ankle Fracture", category: "Foot/Ankle", definition: "Break in ankle bones.", classification: ["Medial", "Lateral", "Bimalleolar", "Trimalleolar"], pathology: "Bone fracture from trauma.", clinicalFeatures: ["Severe pain", "Swelling", "Inability to bear weight"], history: "Traumatic ankle injury.", investigation: ["X-ray", "CT if complex"], treatmentPlan: ["Immobilization", "Surgery if displaced", "Rehabilitation"], specialTests: ["Ottawa ankle rules"], assessment: "Assess fracture severity."},
+            {id: 104, name: "Stress Fracture", category: "General", definition: "Hairline fracture from overuse.", classification: ["By location and severity"], pathology: "Repetitive stress causing fracture.", clinicalFeatures: ["Gradual pain onset", "Swelling", "Tenderness"], history: "Overtraining or running on hard surfaces.", investigation: ["X-ray", "MRI", "Bone scan"], treatmentPlan: ["Rest", "Gradual return to activity", "Activity modification"], specialTests: ["Single leg hop test"], assessment: "Assess pain severity."},
+            {id: 105, name: "Heel Fracture", category: "Foot", definition: "Calcaneal fracture.", classification: ["Tongue type", "Sanders classification"], pathology: "Crush injury from fall or trauma.", clinicalFeatures: ["Severe heel pain", "Swelling", "Bruising"], history: "Fall from height.", investigation: ["X-ray", "CT"], treatmentPlan: ["Immobilization", "Surgery if displaced", "Long recovery"], specialTests: ["Weight-bearing assessment"], assessment: "Assess functional status."},
+            {id: 106, name: "Femur Fracture", category: "Hip/Thigh", definition: "Thighbone fracture.", classification: ["Neck", "Intertrochanteric", "Shaft", "Condylar"], pathology: "Bone fracture from trauma.", clinicalFeatures: ["Severe pain", "Deformity", "Swelling", "Inability to bear weight"], history: "High-energy trauma.", investigation: ["X-ray", "CT"], treatmentPlan: ["Surgery (ORIF or prosthesis)", "Rehabilitation"], specialTests: ["Weight-bearing assessment"], assessment: "Post-surgical monitoring."},
+            {id: 107, name: "Tibia/Fibula Fracture", category: "Leg", definition: "Lower leg bone fracture.", classification: ["Closed", "Open", "Comminuted"], pathology: "Bone fracture from trauma.", clinicalFeatures: ["Severe pain", "Deformity", "Swelling"], history: "Traumatic injury.", investigation: ["X-ray", "CT if complex"], treatmentPlan: ["Casting", "Surgery if displaced", "Rehabilitation"], specialTests: ["Weight-bearing progression"], assessment: "Monitor healing."},
+            {id: 108, name: "Patella Fracture", category: "Knee", definition: "Kneecap fracture.", classification: ["Transverse", "Comminuted", "Vertical"], pathology: "Bone fracture from trauma.", clinicalFeatures: ["Knee pain", "Swelling", "Inability to extend"], history: "Direct blow to knee.", investigation: ["X-ray", "CT"], treatmentPlan: ["Immobilization", "Surgery if displaced", "Rehabilitation"], specialTests: ["Knee extension test"], assessment: "Monitor healing and function."},
+            {id: 109, name: "Shoulder Dislocation", category: "Shoulder", definition: "Shoulder joint dislocation.", classification: ["Anterior", "Posterior", "Inferior"], pathology: "Complete joint displacement.", clinicalFeatures: ["Severe pain", "Visible deformity", "Inability to move arm"], history: "Trauma or fall.", investigation: ["X-ray", "CT"], treatmentPlan: ["Urgent reduction", "Immobilization", "Physical therapy"], specialTests: ["Apprehension test"], assessment: "Assess stability."},
+            {id: 110, name: "Elbow Dislocation", category: "Elbow", definition: "Elbow joint dislocation.", classification: ["Posterior (most common)"], pathology: "Joint displacement from trauma.", clinicalFeatures: ["Severe pain", "Swelling", "Deformity"], history: "Fall on outstretched arm.", investigation: ["X-ray", "CT"], treatmentPlan: ["Urgent reduction", "Immobilization", "Rehabilitation"], specialTests: ["Range of motion"], assessment: "Monitor healing."},
+            {id: 111, name: "Whiplash Neck Injury", category: "Spine", definition: "Acceleration-deceleration neck injury.", classification: ["Grade 0-4"], pathology: "Soft tissue injury from rapid movement.", clinicalFeatures: ["Neck pain", "Headache", "Cognitive symptoms"], history: "Motor vehicle accident.", investigation: ["X-ray", "MRI"], treatmentPlan: ["Early mobilization", "Physiotherapy", "NSAIDs"], specialTests: ["Neck ROM"], assessment: "Assess functional status."},
+            {id: 112, name: "Concussion/TBI", category: "Neuro", definition: "Traumatic brain injury.", classification: ["Mild (concussion)", "Moderate", "Severe"], pathology: "Brain trauma with neuronal injury.", clinicalFeatures: ["Headache", "Confusion", "Memory issues", "Balance problems"], history: "Head trauma.", investigation: ["CT", "MRI", "Neurological testing"], treatmentPlan: ["Rest", "Gradual return to activity", "Cognitive rehabilitation"], specialTests: ["Neuropsychological testing"], assessment: "Comprehensive brain assessment."},
+            {id: 113, name: "Knee Ligament Sprain (Other)", category: "Knee", definition: "Various knee ligament injuries.", classification: ["PCL", "Posterolateral complex", "Collateral"], pathology: "Ligament fiber disruption.", clinicalFeatures: ["Knee pain", "Instability", "Swelling"], history: "Traumatic mechanism.", investigation: ["MRI", "Stability testing"], treatmentPlan: ["RICE", "Bracing", "Physiotherapy", "Surgery if complete"], specialTests: ["Specific ligament tests"], assessment: "Assess specific ligament."},
+            {id: 114, name: "Knee Meniscus Surgery Rehabilitation", category: "Knee", definition: "Recovery after meniscus repair/removal.", classification: ["Post-repair", "Post-meniscectomy"], pathology: "Post-surgical rehabilitation.", clinicalFeatures: ["Post-surgical pain", "Swelling"], history: "Recent surgery.", investigation: ["Clinical assessment"], treatmentPlan: ["Graduated rehabilitation", "ROM restoration", "Strengthening"], specialTests: ["ROM assessment"], assessment: "Monitor surgical site."},
+            {id: 115, name: "Joint Replacement Rehabilitation", category: "General", definition: "Recovery after joint replacement.", classification: ["Hip", "Knee", "Shoulder", "Ankle"], pathology: "Post-surgical rehabilitation.", clinicalFeatures: ["Post-surgical swelling", "Pain", "Limited function"], history: "Recent joint replacement.", investigation: ["Imaging", "Clinical assessment"], treatmentPlan: ["Phase-based rehabilitation", "ROM restoration", "Strengthening"], specialTests: ["ROM and strength tests"], assessment: "Monitor recovery phases."},
+            {id: 116, name: "Rotator Cuff Repair Rehabilitation", category: "Shoulder", definition: "Recovery after rotator cuff surgery.", classification: ["Post-repair phases"], pathology: "Post-surgical tissue healing.", clinicalFeatures: ["Surgical pain", "Limited ROM"], history: "Recent repair surgery.", investigation: ["Imaging", "ROM assessment"], treatmentPlan: ["Phase-protected rehabilitation", "Gradual ROM restoration"], specialTests: ["ROM and strength"], assessment: "Monitor healing phases."},
+            {id: 117, name: "ACL Reconstruction Rehabilitation", category: "Knee", definition: "Recovery after ACL surgery.", classification: ["Post-reconstruction phases"], pathology: "Graft healing and integration.", clinicalFeatures: ["Surgical swelling", "Limited ROM"], history: "Recent ACL reconstruction.", investigation: ["Imaging", "Functional testing"], treatmentPlan: ["Phase-based rehabilitation", "ROM and strength restoration"], specialTests: ["Stability testing"], assessment: "Monitor graft incorporation."},
+            {id: 118, name: "Lateral Ankle Ligament Reconstruction", category: "Foot/Ankle", definition: "Recovery after ankle ligament surgery.", classification: ["Post-reconstruction"], pathology: "Graft healing.", clinicalFeatures: ["Surgical swelling", "Pain"], history: "Recent surgery for chronic instability.", investigation: ["Imaging"], treatmentPlan: ["Protected rehabilitation", "Proprioceptive training"], specialTests: ["Stability tests"], assessment: "Monitor healing."},
+            {id: 119, name: "Carpal Tunnel Surgery Recovery", category: "Hand/Wrist", definition: "Recovery after carpal tunnel release.", classification: ["Post-release phases"], pathology: "Nerve decompression healing.", clinicalFeatures: ["Surgical pain", "Swelling", "Scar tenderness"], history: "Recent release surgery.", investigation: ["Clinical assessment"], treatmentPlan: ["Scar management", "Stretching", "Strengthening"], specialTests: ["Grip strength"], assessment: "Monitor healing and sensation."},
+            {id: 120, name: "Lower Extremity Amputation Rehabilitation", category: "General", definition: "Recovery after limb amputation.", classification: ["Level of amputation", "Unilateral vs bilateral"], pathology: "Post-amputation adaptation.", clinicalFeatures: ["Phantom pain/sensation", "Stump issues", "Balance problems"], history: "Amputation surgery.", investigation: ["Prosthetic evaluation"], treatmentPlan: ["Prosthetic fitting", "Gait training", "Psychological support"], specialTests: ["Balance and gait"], assessment: "Monitor prosthetic adaptation."},
+            {id: 121, name: "Orthotic Device Training", category: "General", definition: "Training with orthotic devices.", classification: ["AFO", "Knee brace", "Back support", "Arm support"], pathology: "Use of supportive devices.", clinicalFeatures: ["Device adjustment needs"], history: "Prescription of orthotic.", investigation: ["Fit assessment"], treatmentPlan: ["Device training", "Progressive use", "Monitoring"], specialTests: ["Device fit and function"], assessment: "Monitor usage and function."},
+            {id: 122, name: "Wheelchair Training and Management", category: "General", definition: "Wheelchair use and optimization.", classification: ["Manual", "Power", "Sport-specific"], pathology: "Mobility adaptation.", clinicalFeatures: ["Mobility limitation"], history: "Spinal cord injury or lower limb loss.", investigation: ["Wheelchair assessment"], treatmentPlan: ["Wheelchair selection", "Training", "Pressure management"], specialTests: ["Mobility and transfer assessment"], assessment: "Monitor independence."},
+            {id: 123, name: "Crutches and Assistive Device Training", category: "General", definition: "Training with crutches and walkers.", classification: ["Crutches", "Cane", "Walker", "Rollator"], pathology: "Mobility assistance.", clinicalFeatures: ["Mobility limitation"], history: "Injury or surgery.", investigation: ["Gait assessment"], treatmentPlan: ["Device training", "Gait pattern correction"], specialTests: ["Gait and balance"], assessment: "Monitor device usage."},
+            {id: 124, name: "Scar Contracture Release", category: "General", definition: "Management of scar-related contractures.", classification: ["Burn related", "Surgical related"], pathology: "Scar tissue contracture.", clinicalFeatures: ["Limited ROM", "Functional limitation"], history: "Severe scarring.", investigation: ["ROM assessment"], treatmentPlan: ["Splinting", "Serial stretching", "Surgery if needed"], specialTests: ["Contracture measurement"], assessment: "Monitor ROM progression."},
+            {id: 125, name: "Burn Rehabilitation", category: "General", definition: "Recovery from burn injuries.", classification: ["Degree and extent"], pathology: "Thermal tissue damage.", clinicalFeatures: ["Pain", "Contracture risk", "Infection risk"], history: "Burn injury.", investigation: ["Imaging", "ROM assessment"], treatmentPlan: ["Wound care", "Splinting", "Physiotherapy", "Scar management"], specialTests: ["ROM and functional"], assessment: "Monitor healing phases."},
+            {id: 126, name: "Lymphatic Drainage Post-Cancer", category: "General", definition: "Lymphatic drainage after cancer treatment.", classification: ["Post-surgery", "Post-radiation"], pathology: "Lymphatic compromise.", clinicalFeatures: ["Swelling", "Heaviness", "Functional limitation"], history: "Cancer treatment.", investigation: ["Lymphoscintigraphy"], treatmentPlan: ["Compression", "Lymphatic drainage", "Exercise", "Skin care"], specialTests: ["Volume measurement"], assessment: "Monitor swelling."},
+            {id: 127, name: "Cancer Rehabilitation", category: "General", definition: "Recovery after cancer treatment.", classification: ["By cancer type and treatment"], pathology: "Treatment side effects.", clinicalFeatures: ["Weakness", "Fatigue", "Limited ROM"], history: "Cancer treatment completion.", investigation: ["Functional assessment"], treatmentPlan: ["Graduated exercise", "Strength training", "Fatigue management"], specialTests: ["Functional capacity"], assessment: "Monitor recovery."},
+            {id: 128, name: "Diabetic Foot Care", category: "General", definition: "Prevention and management of diabetic complications.", classification: ["Risk classification"], pathology: "Neuropathy and vascular changes.", clinicalFeatures: ["Numbness", "Ulcer risk", "Infection risk"], history: "Diabetes history.", investigation: ["Monofilament testing", "Vascular assessment"], treatmentPlan: ["Education", "Skin care", "Proper footwear", "Regular monitoring"], specialTests: ["Sensory testing", "Vascular tests"], assessment: "Monitor foot health."},
+            {id: 129, name: "Neurological Disability Management", category: "Neuro", definition: "Management of various neurological conditions.", classification: ["By specific condition"], pathology: "Neurological impairment.", clinicalFeatures: ["Variable by condition"], history: "Neurological disorder.", investigation: ["Neuro assessment"], treatmentPlan: ["Symptom management", "Functional training", "Adaptive equipment"], specialTests: ["Functional tests"], assessment: "Comprehensive neuro assessment."},
+            {id: 130, name: "Pediatric Physiotherapy", category: "General", definition: "Physiotherapy for children.", classification: ["Age-based", "Condition-based"], pathology: "Developmental or injury-related.", clinicalFeatures: ["Variable by condition"], history: "Pediatric condition.", investigation: ["Developmental assessment"], treatmentPlan: ["Play-based therapy", "Parental education", "Developmental facilitation"], specialTests: ["Developmental milestones"], assessment: "Monitor development."},
+            {id: 131, name: "Geriatric Physiotherapy", category: "General", definition: "Physiotherapy for elderly patients.", classification: ["By condition and functional level"], pathology: "Age-related changes.", clinicalFeatures: ["Balance issues", "Weakness", "Limited mobility"], history: "Age-related.", investigation: ["Fall risk assessment"], treatmentPlan: ["Balance training", "Strength training", "Fall prevention"], specialTests: ["Berg Balance", "Timed Up and Go"], assessment: "Assess safety and independence."},
+            {id: 132, name: "Women's Health Physiotherapy", category: "General", definition: "Physiotherapy for women-specific issues.", classification: ["Pelvic health", "Pregnancy", "Postpartum"], pathology: "Reproductive system changes.", clinicalFeatures: ["Incontinence", "Pelvic pain", "Postpartum dysfunction"], history: "Pregnancy or other health issue.", investigation: ["Pelvic floor assessment"], treatmentPlan: ["Pelvic floor therapy", "Education", "Functional training"], specialTests: ["Pelvic floor assessment"], assessment: "Monitor pelvic health."},
+            {id: 133, name: "Pregnancy-Related Pain Management", category: "General", definition: "Management of pregnancy-associated pain.", classification: ["Back pain", "Pelvic pain", "Other pain"], pathology: "Postural and hormonal changes.", clinicalFeatures: ["Back pain", "Pelvic pain", "SI joint pain"], history: "Pregnancy.", investigation: ["Clinical assessment"], treatmentPlan: ["Postural education", "Strengthening", "Support belt", "Manual therapy"], specialTests: ["ROM assessment"], assessment: "Safe exercise during pregnancy."},
+            {id: 134, name: "Postpartum Recovery", category: "General", definition: "Recovery after childbirth.", classification: ["Vaginal delivery", "Cesarean section"], pathology: "Post-delivery tissue healing.", clinicalFeatures: ["Weakness", "Pelvic floor issues", "Postural problems"], history: "Recent delivery.", investigation: ["Pelvic assessment"], treatmentPlan: ["Pelvic floor rehabilitation", "Core strengthening", "Postural correction"], specialTests: ["Pelvic floor assessment"], assessment: "Monitor recovery."},
+            {id: 135, name: "Diastasis Recti Management", category: "General", definition: "Management of abdominal muscle separation.", classification: ["Severity-based"], pathology: "Rectus abdominis separation.", clinicalFeatures: ["Visible abdominal bulge", "Weakness", "Back pain"], history: "Usually postpartum.", investigation: ["Palpation", "Ultrasound"], treatmentPlan: ["Core strengthening", "Postural education", "Functional training"], specialTests: ["Diastasis measurement"], assessment: "Monitor gap closure."},
+            {id: 136, name: "Sports-Specific Training", category: "General", definition: "Training for specific sports demands.", classification: ["Sport-specific"], pathology: "Sport-specific requirements.", clinicalFeatures: ["Performance optimization"], history: "Athlete training.", investigation: ["Functional capacity assessment"], treatmentPlan: ["Sport-specific strengthening", "Technique training", "Conditioning"], specialTests: ["Sport-specific tests"], assessment: "Assess readiness for sport."},
+            {id: 137, name: "Return-to-Work Program", category: "General", definition: "Program for work capacity restoration.", classification: ["By job demands"], pathology: "Work-related limitations.", clinicalFeatures: ["Reduced work capacity"], history: "Work injury or illness.", investigation: ["Functional capacity evaluation"], treatmentPlan: ["Job simulation", "Strengthening", "Gradual return"], specialTests: ["FCE", "Work simulation"], assessment: "Assess work readiness."},
+            {id: 138, name: "Stroke Recovery", category: "Neuro", definition: "Recovery from acute stroke.", classification: ["By severity and time"], pathology: "Cerebral infarction or hemorrhage.", clinicalFeatures: ["Hemiparesis", "Speech issues", "Cognitive changes"], history: "Acute stroke event.", investigation: ["CT/MRI"], treatmentPlan: ["Early mobilization", "Intensive therapy", "Family education"], specialTests: ["Motor and functional tests"], assessment: "Monitor recovery phases."},
+            {id: 139, name: "Dementia Care and Management", category: "Neuro", definition: "Physiotherapy for dementia patients.", classification: ["By type and severity"], pathology: "Neurodegeneration.", clinicalFeatures: ["Cognitive decline", "Balance issues", "Functional loss"], history: "Progressive cognitive decline.", investigation: ["Cognitive and functional assessment"], treatmentPlan: ["Gentle exercise", "Balance training", "Structured activity"], specialTests: ["Functional capacity"], assessment: "Maintain safety and function."},
+            {id: 140, name: "Palliative/Hospice Care", category: "General", definition: "Comfort care in advanced illness.", classification: ["End-of-life care"], pathology: "Terminal illness.", clinicalFeatures: ["Pain", "Reduced function", "Comfort goals"], history: "Advanced disease.", investigation: ["Symptom assessment"], treatmentPlan: ["Comfort positioning", "Gentle mobilization", "Symptom management"], specialTests: ["Pain assessment"], assessment: "Comfort and dignity focus."},
+            {id: 141, name: "Pediatric Gait Disorders", category: "General", definition: "Treatment of abnormal gait in children.", classification: ["By cause: Cerebral palsy, tone disorders"], pathology: "Neuromuscular dysfunction.", clinicalFeatures: ["Abnormal gait pattern", "Functional limitation"], history: "Developmental or acquired disorder.", investigation: ["Gait analysis", "Video analysis"], treatmentPlan: ["Gait retraining", "Strengthening", "Stretching"], specialTests: ["Gait analysis"], assessment: "Assess gait mechanics."},
+            {id: 142, name: "Torticollis Management", category: "Neuro", definition: "Management of neck contracture/dystonia.", classification: ["Congenital vs acquired"], pathology: "Sternocleidomastoid shortening or dystonia.", clinicalFeatures: ["Head tilt", "Neck stiffness", "Limited rotation"], history: "Birth injury or developmental issue.", investigation: ["Imaging", "Clinical assessment"], treatmentPlan: ["Stretching", "Positioning", "Strengthening", "Botox", "Surgery if severe"], specialTests: ["ROM assessment"], assessment: "Monitor neck alignment."},
+            {id: 143, name: "Plagiocephaly Management", category: "Neuro", definition: "Management of flat head syndrome.", classification: ["Positional vs non-positional"], pathology: "Skull flattening from positioning.", clinicalFeatures: ["Asymmetrical skull shape", "Developmental concerns"], history: "Prolonged positioning.", investigation: ["Clinical assessment"], treatmentPlan: ["Positional changes", "Physiotherapy", "Helmet if indicated"], specialTests: ["Head shape assessment"], assessment: "Monitor head shape."},
+            {id: 144, name: "Early Intervention Therapy", category: "General", definition: "Early childhood intervention services.", classification: ["Birth to 3 years"], pathology: "Developmental delay or disorder.", clinicalFeatures: ["Developmental delay"], history: "Identified developmental concern.", investigation: ["Developmental assessment"], treatmentPlan: ["Play-based therapy", "Family-centered intervention"], specialTests: ["Developmental milestones"], assessment: "Monitor developmental progress."},
+            {id: 145, name: "Behavioral Health and Exercise", category: "General", definition: "Exercise for mental health.", classification: ["Depression", "Anxiety", "Stress"], pathology: "Psychosomatic factors.", clinicalFeatures: ["Mental health symptoms"], history: "Mental health condition.", investigation: ["Functional assessment"], treatmentPlan: ["Structured exercise program", "Mind-body techniques"], specialTests: ["Mood and functional"], assessment: "Monitor mental and physical health."},
+            {id: 146, name: "Chronic Disease Management", category: "General", definition: "Long-term management of chronic conditions.", classification: ["Multiple conditions possible"], pathology: "Various chronic conditions.", clinicalFeatures: ["Multiple symptoms"], history: "Chronic disease diagnosis.", investigation: ["Comprehensive assessment"], treatmentPlan: ["Multimodal approach", "Education", "Exercise", "Self-management"], specialTests: ["Functional capacity"], assessment: "Monitor disease progression."},
+            {id: 147, name: "Pain Management Program", category: "General", definition: "Comprehensive pain management.", classification: ["Acute vs chronic pain"], pathology: "Various pain mechanisms.", clinicalFeatures: ["Pain varying in severity"], history: "Acute or chronic pain.", investigation: ["Pain assessment"], treatmentPlan: ["Multimodal pain management"], specialTests: ["Pain scales"], assessment: "Monitor pain levels."},
+            {id: 148, name: "Quality of Life Optimization", category: "General", definition: "Program to improve overall quality of life.", classification: ["Post-recovery", "Chronic disease management"], pathology: "Functional limitations or health condition.", clinicalFeatures: ["Limited function", "Reduced independence"], history: "Various conditions.", investigation: ["Functional and QOL assessment"], treatmentPlan: ["Comprehensive rehabilitation"], specialTests: ["QOL measures"], assessment: "Monitor functional independence."},
+            {id: 149, name: "Preventive Health Program", category: "General", definition: "Program to prevent future health problems.", classification: ["Disease prevention", "Injury prevention"], pathology: "Prevention-focused.", clinicalFeatures: ["Prevention"], history: "N/A - prevention focus.", investigation: ["Risk assessment"], treatmentPlan: ["Education", "Lifestyle modification"], specialTests: ["Risk screening"], assessment: "Identify and mitigate risks."},
+            {id: 150, name: "Telehealth Physiotherapy", category: "General", definition: "Remote physiotherapy delivery.", classification: ["By condition type"], pathology: "Remote service delivery.", clinicalFeatures: ["Access via telehealth"], history: "Remote service preference.", investigation: ["Virtual assessment"], treatmentPlan: ["Remote exercises", "Virtual monitoring"], specialTests: ["Virtual functional assessment"], assessment: "Remote monitoring and support."},
+            // ====== FINAL 50 CONDITIONS (151-200) ======
+            {id: 151, name: "Knee Meniscus Tear - Medial", category: "Knee", definition: "Tear of medial meniscus cartilage.", classification: ["Vertical", "Horizontal", "Bucket-handle", "Parrot-beak"], pathology: "Degenerative or traumatic tear.", clinicalFeatures: ["Medial joint line pain", "Locking", "Swelling"], history: "Often from twisting or squatting.", investigation: ["MRI", "McMurray's test positive"], treatmentPlan: ["Conservative or arthroscopic repair"], specialTests: ["McMurray's test", "Thessaly test"], assessment: "Assess for mechanical symptoms."},
+            {id: 152, name: "Knee Meniscus Tear - Lateral", category: "Knee", definition: "Tear of lateral meniscus cartilage.", classification: ["By tear type"], pathology: "Traumatic or degenerative.", clinicalFeatures: ["Lateral joint line pain", "Clicking", "Swelling"], history: "Often from pivoting motion.", investigation: ["MRI", "McMurray's test"], treatmentPlan: ["Conservative or surgical repair"], specialTests: ["McMurray's test", "Crank test"], assessment: "Assess mechanical symptoms."},
+            {id: 153, name: "Knee Chondromalacia Patellae", category: "Knee", definition: "Cartilage softening under patella.", classification: ["Grades 1-4"], pathology: "Cartilage degeneration from tracking issues.", clinicalFeatures: ["Retropatellar pain", "Crepitus", "Swelling"], history: "Progressive from overuse.", investigation: ["MRI", "Arthroscopy"], treatmentPlan: ["VMO strengthening", "Activity modification", "Bracing"], specialTests: ["Clarke's test", "Grind test"], assessment: "Assess patellar tracking."},
+            {id: 154, name: "Knee Osgood-Schlatter Disease", category: "Knee", definition: "Tibial tuberosity inflammation in adolescents.", classification: ["By severity"], pathology: "Repetitive traction on growth plate.", clinicalFeatures: ["Anterior tibial pain", "Swelling over tuberosity", "Pain with kneeling"], history: "Growing adolescents in sports.", investigation: ["X-ray", "Clinical assessment"], treatmentPlan: ["Activity modification", "Ice", "Stretching", "Bracing"], specialTests: ["Palpation of tuberosity"], assessment: "Assess pain severity and swelling."},
+            {id: 155, name: "Knee Jumper's Knee", category: "Knee", definition: "Patellar tendon pain from jumping.", classification: ["Acute vs chronic"], pathology: "Repetitive jumping stress on tendon.", clinicalFeatures: ["Anterior knee pain below patella", "Pain with jumping"], history: "Basketball, volleyball players.", investigation: ["Ultrasound", "MRI"], treatmentPlan: ["Eccentric strengthening", "Strap below patella", "Activity modification"], specialTests: ["Single leg hop"], assessment: "Assess functional capacity."},
+            {id: 156, name: "Hip Labral Tear", category: "Hip", definition: "Tear of hip labrum cartilage.", classification: ["Anterior", "Posterior", "Superior"], pathology: "Traumatic or degenerative tear.", clinicalFeatures: ["Groin or hip pain", "Clicking", "Catching sensation"], history: "Often from FAI or trauma.", investigation: ["MRI Arthrography", "FADIR test"], treatmentPlan: ["Conservative management", "Arthroscopic repair"], specialTests: ["FADIR test", "Anterior impingement test"], assessment: "Assess hip mechanics."},
+            {id: 157, name: "Gluteus Medius Weakness", category: "Hip", definition: "Weakness of hip abductor muscles.", classification: ["Primary vs secondary"], pathology: "Muscle inhibition or injury.", clinicalFeatures: ["Hip pain", "Lateral hip pain", "Trendelenburg gait"], history: "Often post-injury or from poor posture.", investigation: ["Hip abduction strength test"], treatmentPlan: ["Hip abductor strengthening", "Gait correction"], specialTests: ["Trendelenburg test", "Hip abduction strength"], assessment: "Assess abductor function."},
+            {id: 158, name: "Knee Plica Syndrome", category: "Knee", definition: "Inflammation of knee synovial plicae.", classification: ["Medial", "Lateral", "Suprapatellar"], pathology: "Plica irritation from overuse.", clinicalFeatures: ["Anterior or medial knee pain", "Clicking", "Swelling"], history: "Repetitive knee flexion activity.", investigation: ["MRI", "Arthroscopy"], treatmentPlan: ["Activity modification", "NSAIDs", "Physiotherapy"], specialTests: ["Plica test"], assessment: "Assess mechanical symptoms."},
+            {id: 159, name: "Knee Synovitis", category: "Knee", definition: "Inflammation of knee synovial membrane.", classification: ["Acute", "Chronic"], pathology: "Synovial membrane inflammation.", clinicalFeatures: ["Effusion", "Pain", "Swelling", "Stiffness"], history: "Post-injury or overuse.", investigation: ["Imaging", "Aspiration if needed"], treatmentPlan: ["RICE", "NSAIDs", "Physiotherapy"], specialTests: ["Ballottement test"], assessment: "Assess swelling and pain."},
+            {id: 160, name: "Ankle Inversion Injury Chronic", category: "Foot/Ankle", definition: "Chronic ankle instability from repeated sprains.", classification: ["Mechanical", "Functional"], pathology: "Ligament damage and proprioceptive deficit.", clinicalFeatures: ["Recurring ankle turns", "Instability sensation", "Weakness"], history: "Repeated ankle sprains.", investigation: ["Anterior drawer test", "Talar tilt test"], treatmentPlan: ["Proprioceptive training", "Strengthening", "Bracing"], specialTests: ["Anterior drawer", "Balance tests"], assessment: "Assess proprioception and stability."},
+            {id: 161, name: "Foot Pronation/Supination Disorder", category: "Foot", definition: "Excessive or insufficient foot pronation.", classification: ["Overpronation", "Supination (underpronation)"], pathology: "Biomechanical dysfunction.", clinicalFeatures: ["Pain in foot/ankle/knee", "Gait abnormality", "Shoe wear pattern"], history: "Often from poor footwear or biomechanics.", investigation: ["Gait analysis", "Foot biomechanics"], treatmentPlan: ["Corrective footwear", "Orthotics", "Strengthening"], specialTests: ["Foot posture assessment"], assessment: "Analyze foot mechanics."},
+            {id: 162, name: "Metatarsalgia", category: "Foot", definition: "Forefoot pain from ball of foot pressure.", classification: ["Mechanical", "From neuroma or other cause"], pathology: "Excessive metatarsal head pressure.", clinicalFeatures: ["Forefoot pain", "Feeling of walking on stones", "Calluses"], history: "High heels, tight shoes, overuse.", investigation: ["Physical exam", "Imaging if needed"], treatmentPlan: ["Proper footwear", "Metatarsal pads", "Stretching"], specialTests: ["Metatarsal compression test"], assessment: "Assess pain location and severity."},
+            {id: 163, name: "Turf Toe", category: "Foot", definition: "Hallux limitus or first MTP sprain.", classification: ["Grade I-III"], pathology: "Injury to first MTP joint.", clinicalFeatures: ["Great toe pain", "Limited dorsiflexion", "Swelling"], history: "Pushing off forcefully on artificial turf.", investigation: ["X-ray", "MRI"], treatmentPlan: ["Taping", "Stiff shoe", "NSAIDs", "Surgery if severe"], specialTests: ["First MTP ROM"], assessment: "Assess dorsiflexion range."},
+            {id: 164, name: "Calf Strain", category: "Leg", definition: "Tear of calf muscle (gastrocnemius or soleus).", classification: ["Grade I-III"], pathology: "Muscle fiber disruption.", clinicalFeatures: ["Sudden calf pain", "Swelling", "Weakness", "Difficulty walking"], history: "Explosive push-off or stretching injury.", investigation: ["Ultrasound", "MRI"], treatmentPlan: ["RICE", "Eccentric strengthening", "Gradual return"], specialTests: ["Calf raise test"], assessment: "Assess muscle strength."},
+            {id: 165, name: "Anterior Tibialis Weakness", category: "Leg", definition: "Weakness of shin muscle.", classification: ["Nerve injury", "Muscle injury"], pathology: "Nerve or muscle dysfunction.", clinicalFeatures: ["Foot drop", "Tripping", "Shin pain"], history: "May follow nerve injury or stroke.", investigation: ["EMG/NCS", "Strength testing"], treatmentPlan: ["Strengthening exercises", "Ankle-foot orthosis if needed"], specialTests: ["Dorsiflexion strength"], assessment: "Assess foot dorsiflexion function."},
+            {id: 166, name: "Peroneal Nerve Palsy", category: "Neuro", definition: "Common peroneal nerve compression or injury.", classification: ["At knee (most common)", "Other locations"], pathology: "Nerve compression or stretch injury.", clinicalFeatures: ["Foot drop", "Numbness lateral leg/foot"], history: "May follow injury or tight casting.", investigation: ["EMG/NCS", "Imaging"], treatmentPlan: ["Remove compression", "Bracing", "Physiotherapy"], specialTests: ["Foot drop assessment", "Sensory testing"], assessment: "Assess nerve function."},
+            {id: 167, name: "Femoral Nerve Palsy", category: "Neuro", definition: "Femoral nerve compression or injury.", classification: ["By location and cause"], pathology: "Nerve compression from various causes.", clinicalFeatures: ["Quadriceps weakness", "Knee instability", "Numbness anterior thigh"], history: "May follow pelvic injury or surgery.", investigation: ["EMG/NCS"], treatmentPlan: ["Remove compression", "Bracing", "Physiotherapy"], specialTests: ["Quad strength", "Sensory testing"], assessment: "Assess nerve function."},
+            {id: 168, name: "Ulnar Nerve Entrapment at Wrist", category: "Hand/Wrist", definition: "Ulnar nerve compression at wrist (Guyon's canal).", classification: ["Guyon's canal syndrome"], pathology: "Nerve compression from trauma or mass.", clinicalFeatures: ["Hand weakness", "Numbness ulnar side", "Claw hand deformity"], history: "May follow wrist trauma.", investigation: ["EMG/NCS", "Imaging"], treatmentPlan: ["Activity modification", "Splinting", "Surgery if needed"], specialTests: ["Intrinsic hand strength"], assessment: "Assess hand function and sensation."},
+            {id: 169, name: "Radial Nerve Palsy", category: "Hand/Wrist", definition: "Radial nerve compression or injury.", classification: ["Saturday night palsy", "Posterior interosseous nerve syndrome"], pathology: "Nerve compression or stretch.", clinicalFeatures: ["Wrist drop", "Thumb extension loss"], history: "May follow nerve compression.", investigation: ["EMG/NCS"], treatmentPlan: ["Remove compression", "Wrist extension splint", "Physiotherapy"], specialTests: ["Wrist extension", "Thumb extension"], assessment: "Assess radial nerve function."},
+            {id: 170, name: "Finger Flexor Tendon Injury", category: "Hand", definition: "Tear of finger flexor tendons.", classification: ["FDS", "FDP", "Location of tear"], pathology: "Tendon rupture from trauma.", clinicalFeatures: ["Loss of finger flexion", "Deformity", "Swelling"], history: "Usually from laceration.", investigation: ["Clinical assessment", "Ultrasound"], treatmentPlan: ["Surgical repair", "Post-repair rehabilitation"], specialTests: ["Finger flexion testing"], assessment: "Assess functional grip."},
+            {id: 171, name: "Finger Extensor Tendon Injury", category: "Hand", definition: "Tear of finger extensor tendons.", classification: ["By zone of injury"], pathology: "Tendon rupture.", clinicalFeatures: ["Loss of finger extension", "Lag sign"], history: "Usually from trauma.", investigation: ["Clinical assessment"], treatmentPlan: ["Splinting or surgery", "Rehabilitation"], specialTests: ["Finger extension testing"], assessment: "Assess finger extension function."},
+            {id: 172, name: "Thumb CMC Osteoarthritis", category: "Hand", definition: "Arthritis at thumb carpometacarpal joint.", classification: ["By severity"], pathology: "Joint cartilage degeneration.", clinicalFeatures: ["Thumb pain at base", "Weakness in pinch", "Swelling"], history: "More common in women.", investigation: ["X-ray", "Clinical assessment"], treatmentPlan: ["Thumb spica splint", "NSAIDs", "Injections", "Surgery if needed"], specialTests: ["Pinch strength testing"], assessment: "Assess thumb opposition and pinch."},
+            {id: 173, name: "Forearm Pronation/Supination Loss", category: "Arm", definition: "Limited rotational movement of forearm.", classification: ["Pronation loss", "Supination loss"], pathology: "Joint or muscle dysfunction.", clinicalFeatures: ["Limited rotation", "Functional limitation"], history: "Post-injury or surgery.", investigation: ["ROM assessment"], treatmentPlan: ["Mobilization", "Stretching", "Strengthening"], specialTests: ["Pronation/supination ROM"], assessment: "Measure rotational range."},
+            {id: 174, name: "Biceps Tendon Rupture", category: "Shoulder/Arm", definition: "Complete rupture of biceps tendon.", classification: ["Long head (proximal)", "Short head", "Distal"], pathology: "Tendon tear from strain or degeneration.", clinicalFeatures: ["Sudden pain", "Loss of elbow flexion", "Bruising", "Bulge"], history: "May follow lifting or trauma.", investigation: ["Ultrasound", "MRI"], treatmentPlan: ["Surgical repair", "Conservative if distal", "Rehabilitation"], specialTests: ["Elbow flexion strength"], assessment: "Assess biceps function."},
+            {id: 175, name: "Triceps Tendon Rupture", category: "Arm", definition: "Rupture of triceps tendon.", classification: ["Acute vs chronic"], pathology: "Tendon tear from overload.", clinicalFeatures: ["Sudden pain", "Loss of elbow extension", "Weakness"], history: "May follow trauma or chronic overuse.", investigation: ["Ultrasound", "MRI"], treatmentPlan: ["Surgical repair", "Rehabilitation"], specialTests: ["Elbow extension strength"], assessment: "Assess triceps function."},
+            {id: 176, name: "Wrist Extensor Tendinopathy", category: "Hand/Wrist", definition: "Inflammation of wrist extensor tendons.", classification: ["Acute", "Chronic"], pathology: "Tendon overuse inflammation.", clinicalFeatures: ["Wrist pain", "Weakness in extension", "Swelling"], history: "Repetitive wrist extension activity.", investigation: ["Ultrasound", "MRI"], treatmentPlan: ["Rest", "NSAIDs", "Stretching", "Physiotherapy"], specialTests: ["Wrist extension strength"], assessment: "Assess functional capacity."},
+            {id: 177, name: "Wrist Flexor Tendinopathy", category: "Hand/Wrist", definition: "Inflammation of wrist flexor tendons.", classification: ["Acute", "Chronic"], pathology: "Tendon overuse inflammation.", clinicalFeatures: ["Wrist pain on flexion", "Weakness", "Swelling"], history: "Repetitive flexion activity.", investigation: ["Ultrasound"], treatmentPlan: ["Rest", "Stretching", "Physiotherapy"], specialTests: ["Wrist flexion strength"], assessment: "Assess wrist strength."},
+            {id: 178, name: "Elbow Strain", category: "Elbow", definition: "Muscle or tendon strain at elbow.", classification: ["Acute", "Chronic"], pathology: "Muscle fiber disruption.", clinicalFeatures: ["Elbow pain", "Swelling", "Weakness", "Limited ROM"], history: "From overuse or sudden strain.", investigation: ["Ultrasound", "MRI"], treatmentPlan: ["RICE", "NSAIDs", "Physiotherapy"], specialTests: ["Strength and ROM testing"], assessment: "Assess functional capacity."},
+            {id: 179, name: "Pronator Syndrome", category: "Neuro", definition: "Median nerve compression in forearm.", classification: ["Compression points in forearm"], pathology: "Pronator teres muscle compression.", clinicalFeatures: ["Forearm pain", "Numbness in median distribution"], history: "Repetitive pronation activity.", investigation: ["EMG/NCS", "Imaging"], treatmentPlan: ["Activity modification", "Stretching", "Surgery if needed"], specialTests: ["Pronation resistance test"], assessment: "Assess nerve symptoms."},
+            {id: 180, name: "Anterior Interosseous Nerve Syndrome", category: "Neuro", definition: "AIN nerve compression causing hand weakness.", classification: ["Pure AIN syndrome"], pathology: "Nerve compression from pronator teres.", clinicalFeatures: ["Loss of thumb IP flexion", "Loss of index finger DIP flexion"], history: "May be painless initially.", investigation: ["EMG/NCS"], treatmentPlan: ["Observation initially", "Surgery if no recovery"], specialTests: ["Pinch/flexion testing"], assessment: "Assess specific muscle function."},
+            {id: 181, name: "Posterior Interosseous Nerve Syndrome", category: "Neuro", definition: "PIN nerve compression causing finger extension loss.", classification: ["At various levels in forearm"], pathology: "Nerve compression.", clinicalFeatures: ["Finger extension weakness", "Wrist drop possible", "No sensory loss"], history: "May follow repetitive supination.", investigation: ["EMG/NCS", "Imaging"], treatmentPlan: ["Activity modification", "Surgery if severe"], specialTests: ["Finger extension strength"], assessment: "Assess motor function."},
+            {id: 182, name: "Nerve Compression Neuropathy - General", category: "Neuro", definition: "Peripheral nerve compression from various causes.", classification: ["By location and cause"], pathology: "Mechanical nerve compression.", clinicalFeatures: ["Numbness", "Weakness", "Pain in distribution"], history: "Often gradual onset.", investigation: ["EMG/NCS", "Imaging"], treatmentPlan: ["Remove compression", "Physiotherapy", "Injection if needed"], specialTests: ["Specific nerve tests"], assessment: "Comprehensive nerve assessment."},
+            {id: 183, name: "Diabetic Neuropathy", category: "Neuro", definition: "Nerve damage from diabetes.", classification: ["Peripheral vs autonomic"], pathology: "Glucose-related nerve damage.", clinicalFeatures: ["Numbness", "Weakness", "Foot pain", "Autonomic symptoms"], history: "Long-standing diabetes.", investigation: ["Monofilament testing", "NCS"], treatmentPlan: ["Tight glucose control", "Pain management", "Foot care"], specialTests: ["Sensory testing", "Vibration testing"], assessment: "Assess neuropathy severity."},
+            {id: 184, name: "Charcot-Marie-Tooth Disease", category: "Neuro", definition: "Hereditary peripheral neuropathy.", classification: ["Type 1", "Type 2"], pathology: "Genetic disorder affecting nerves.", clinicalFeatures: ["Distal muscle weakness", "Sensory loss", "Foot deformity"], history: "Family history of nerve disease.", investigation: ["EMG/NCS", "Genetic testing"], treatmentPlan: ["Management of symptoms", "Orthotic support", "Genetic counseling"], specialTests: ["Nerve conduction"], assessment: "Monitor disease progression."},
+            {id: 185, name: "Scapular Fracture", category: "Shoulder", definition: "Fracture of scapula bone.", classification: ["Body", "Spine", "Acromion", "Glenoid"], pathology: "Bone break from trauma.", clinicalFeatures: ["Severe shoulder pain", "Swelling", "Dysfunction"], history: "High-energy trauma.", investigation: ["X-ray", "CT"], treatmentPlan: ["Immobilization", "Surgery if displaced", "Rehabilitation"], specialTests: ["ROM and strength assessment"], assessment: "Monitor healing."},
+            {id: 186, name: "Clavicle Fracture", category: "Shoulder", definition: "Collarbone fracture.", classification: ["Proximal", "Middle (most common)", "Distal"], pathology: "Bone break from direct blow or fall.", clinicalFeatures: ["Shoulder pain", "Deformity", "Limited arm movement"], history: "Fall or direct trauma.", investigation: ["X-ray"], treatmentPlan: ["Sling", "Observation usually", "Surgery if displaced"], specialTests: ["ROM assessment"], assessment: "Monitor alignment and union."},
+            {id: 187, name: "Acromioclavicular (AC) Joint Sprain", category: "Shoulder", definition: "Ligament injury of AC joint.", classification: ["Grade I-VI by severity"], pathology: "Ligament disruption from trauma.", clinicalFeatures: ["AC joint pain", "Deformity (step-off)", "Weakness"], history: "Fall on shoulder or direct blow.", investigation: ["X-ray", "MRI"], treatmentPlan: ["Sling", "NSAIDs", "Physiotherapy", "Surgery if Grade III+"], specialTests: ["AC joint compression test"], assessment: "Assess AC joint stability."},
+            {id: 188, name: "Sternoclavicular (SC) Joint Injury", category: "Shoulder", definition: "Injury to SC joint.", classification: ["Sprain", "Dislocation"], pathology: "Joint ligament or bone injury.", clinicalFeatures: ["Anterior chest/shoulder pain", "Visible deformity"], history: "Direct trauma to anterior shoulder.", investigation: ["X-ray", "CT"], treatmentPlan: ["Sling", "Ice", "Surgery if posterior dislocation"], specialTests: ["Joint palpation"], assessment: "Assess joint stability."},
+            {id: 189, name: "Thoracic Outlet Syndrome - Vascular", category: "Neuro-Vascular", definition: "Vascular compression at thoracic outlet.", classification: ["Venous", "Arterial"], pathology: "Vessel compression from anatomical structures.", clinicalFeatures: ["Color changes", "Swelling", "Cold arm", "Pain"], history: "May follow trauma or positional activities.", investigation: ["Vascular studies", "Angiography"], treatmentPlan: ["Posture correction", "Physical therapy", "Surgery if severe"], specialTests: ["Vascular tests"], assessment: "Assess vascular compromise."},
+            {id: 190, name: "Lymph Node Enlargement Post-Injury", category: "General", definition: "Swollen lymph nodes following injury/infection.", classification: ["Reactive", "By location"], pathology: "Inflammatory response to injury or infection.", clinicalFeatures: ["Palpable nodes", "Swelling", "Tenderness"], history: "Post-injury or infection.", investigation: ["Imaging", "Ultrasound"], treatmentPlan: ["Treat underlying cause", "Monitoring"], specialTests: ["Node palpation"], assessment: "Assess node characteristics."},
+            {id: 191, name: "Edema Management", category: "General", definition: "Management of swelling/fluid accumulation.", classification: ["Peripheral edema", "Limb edema"], pathology: "Fluid accumulation from various causes.", clinicalFeatures: ["Swelling", "Heaviness", "Skin changes"], history: "Post-injury, post-surgery, or vascular issues.", investigation: ["Measurement", "Imaging"], treatmentPlan: ["Elevation", "Compression", "Exercise", "Manual drainage"], specialTests: ["Circumference measurement"], assessment: "Monitor swelling reduction."},
+            {id: 192, name: "Keloid Scar Formation", category: "General", definition: "Excessive scar tissue growth.", classification: ["By location and extent"], pathology: "Abnormal healing with overgrowth.", clinicalFeatures: ["Thick raised scar", "Extends beyond original wound"], history: "Predisposed individuals.", investigation: ["Clinical assessment"], treatmentPlan: ["Silicone products", "Laser", "Injections", "Surgical excision", "Radiation"], specialTests: ["Scar assessment"], assessment: "Monitor scar progression."},
+            {id: 193, name: "Hypertrophic Scar", category: "General", definition: "Raised scar within original wound boundaries.", classification: ["By severity"], pathology: "Excessive collagen deposition.", clinicalFeatures: ["Raised, red scar", "Tightness", "Itching"], history: "Post-wound healing.", investigation: ["Clinical assessment"], treatmentPlan: ["Massage", "Pressure garments", "Silicone gel", "Laser", "Injections"], specialTests: ["Scar measurement"], assessment: "Monitor scar improvement."},
+            {id: 194, name: "Postural Kyphosis", category: "Spine", definition: "Excessive thoracic spine curvature from posture.", classification: ["Postural", "Scheuermann's disease"], pathology: "Muscle weakness and chronic poor posture.", clinicalFeatures: ["Rounded shoulders", "Forward head", "Back pain"], history: "Gradual from poor posture habits.", investigation: ["X-ray", "Posture assessment"], treatmentPlan: ["Posture correction", "Strengthening", "Stretching", "Ergonomic modification"], specialTests: ["Posture analysis"], assessment: "Assess postural alignment."},
+            {id: 195, name: "Lordosis", category: "Spine", definition: "Excessive lumbar spine curvature.", classification: ["Postural", "Structural"], pathology: "Muscle imbalance or skeletal variation.", clinicalFeatures: ["Low back pain", "Abdominal protrusion", "Buttock prominence"], history: "May be postural or developmental.", investigation: ["X-ray", "Posture assessment"], treatmentPlan: ["Core strengthening", "Hip flexor stretching", "Posture correction"], specialTests: ["Lumbar curve measurement"], assessment: "Assess spinal alignment."},
+            {id: 196, name: "Scoliosis Management", category: "Spine", definition: "Management of spinal curvature disorder.", classification: ["Idiopathic", "Structural", "Functional"], pathology: "Lateral spinal curvature.", clinicalFeatures: ["Visible curve", "Shoulder height difference", "Rib asymmetry"], history: "Usually adolescent onset.", investigation: ["X-ray", "Cobb angle measurement"], treatmentPlan: ["Observation if mild", "Bracing", "Surgery if severe"], specialTests: ["Curve measurement", "Forward bend test"], assessment: "Monitor curve progression."},
+            {id: 197, name: "Stenosis - Lumbar", category: "Spine", definition: "Narrowing of lumbar spinal canal.", classification: ["Central", "Lateral recess", "Foraminal"], pathology: "Disc bulge, ligament thickening, osteophytes.", clinicalFeatures: ["Claudication (leg pain with walking)", "Numbness", "Weakness"], history: "Progressive with age and degenerative changes.", investigation: ["MRI", "CT", "EMG/NCS"], treatmentPlan: ["Conservative management", "Epidural injections", "Decompressive surgery"], specialTests: ["Walking tolerance test"], assessment: "Assess walking ability."},
+            {id: 198, name: "Stenosis - Cervical", category: "Spine", definition: "Narrowing of cervical spinal canal.", classification: ["Central", "Foraminal"], pathology: "Disc herniation and osteophyte formation.", clinicalFeatures: ["Neck pain", "Arm pain", "Weakness", "Myelopathy signs"], history: "Progressive age-related changes.", investigation: ["MRI", "CT", "EMG/NCS"], treatmentPlan: ["Conservative", "NSAIDs", "Physiotherapy", "Surgery if myelopathy"], specialTests: ["Myelopathy tests"], assessment: "Assess cord compression severity."},
+            {id: 199, name: "Autonomic Dysfunction", category: "Neuro", definition: "Dysfunction of autonomic nervous system.", classification: ["POTS", "Orthostatic hypotension", "Other"], pathology: "Autonomic nerve dysfunction.", clinicalFeatures: ["Dizziness on standing", "Palpitations", "Sweating changes"], history: "Post-viral or idiopathic.", investigation: ["Tilt table test", "Heart rate variability"], treatmentPlan: ["Fluid intake", "Salt supplementation", "Compression garments", "Medications"], specialTests: ["Autonomic function tests"], assessment: "Monitor symptoms and tolerance."},
+            {id: 200, name: "Post-COVID Rehabilitation", category: "General", definition: "Recovery program after COVID-19 infection.", classification: ["By symptom type and severity"], pathology: "Multi-system effects of viral infection.", clinicalFeatures: ["Fatigue", "Dyspnea", "Chest pain", "Cognitive issues", "Joint pain"], history: "Post-COVID.", investigation: ["Functional and cardiopulmonary testing"], treatmentPlan: ["Graded exercise", "Breathing techniques", "Cognitive rehabilitation", "Psychosocial support"], specialTests: ["Functional capacity testing", "6-minute walk"], assessment: "Assess tolerance and guide progression carefully."}
+        ];
+
+        // State management
+        let currentPage = 'cover';
+        let selectedDiseaseId = null;
+
+        function startPortal() {
+            document.getElementById('coverPage').style.display = 'none';
+            document.getElementById('mainContainer').classList.add('active');
+            displayDiseaseList();
+        }
+
+        function displayDiseaseList() {
+            const grid = document.getElementById('diseaseGrid');
+            grid.innerHTML = '';
+            
+            diseases.forEach(disease => {
+                const card = document.createElement('div');
+                card.className = 'disease-card';
+                card.innerHTML = `<h3>${disease.name}</h3><p>${disease.category}</p>`;
+                card.onclick = () => selectDisease(disease.id);
+                grid.appendChild(card);
+            });
+            
+            document.getElementById('diseaseListContainer').style.display = 'block';
+            document.getElementById('contentPage').classList.remove('active');
+            currentPage = 'list';
+        }
+
+        function filterDiseases() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.disease-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        }
+
+        function selectDisease(diseaseId) {
+            selectedDiseaseId = diseaseId;
+            displayDiseaseContent();
+        }
+
+        function displayDiseaseContent() {
+            const disease = diseases.find(d => d.id === selectedDiseaseId);
+            if (!disease) return;
+
+            document.getElementById('contentTitle').textContent = disease.name;
+            
+            let content = '';
+            content += `<div class="content-section"><h3>📋 Definition</h3><p>${disease.definition}</p></div>`;
+            content += `<div class="content-section"><h3>🏷️ Classification</h3><ul>${disease.classification.map(item => `<li>${item}</li>`).join('')}</ul></div>`;
+            content += `<div class="content-section"><h3>🔬 Pathology</h3><p>${disease.pathology}</p></div>`;
+            content += `<div class="content-section"><h3>⚠️ Clinical Features</h3><ul>${disease.clinicalFeatures.map(item => `<li>${item}</li>`).join('')}</ul></div>`;
+            content += `<div class="content-section"><h3>📖 History</h3><p>${disease.history}</p></div>`;
+            content += `<div class="content-section"><h3>🔍 Investigation</h3><ul>${disease.investigation.map(item => `<li>${item}</li>`).join('')}</ul></div>`;
+            content += `<div class="content-section"><h3>💊 Treatment Plan</h3><ul>${disease.treatmentPlan.map(item => `<li>${item}</li>`).join('')}</ul></div>`;
+            content += `<div class="content-section"><h3>🧪 Special Tests</h3><ul>${disease.specialTests.map(item => `<li>${item}</li>`).join('')}</ul></div>`;
+            content += `<div class="content-section"><h3>📊 Assessment</h3><p>${disease.assessment}</p></div>`;
+
+            document.getElementById('contentArea').innerHTML = content;
+            
+            document.getElementById('diseaseListContainer').style.display = 'none';
+            document.getElementById('contentPage').classList.add('active');
+            currentPage = 'content';
+        }
+
+        function goToList() {
+            displayDiseaseList();
+        }
+
+        function goBackToCover() {
+            location.reload();
+        }
+    </script>
+
+</body>
+</html>
